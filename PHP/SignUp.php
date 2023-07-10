@@ -19,6 +19,9 @@
             echo "<script>alert('회원가입이 완료되었습니다.');</script>";
             header('../HTML/Login.html');
         }
+        else{
+            echo "<script>alert('회원가입에 실패하였습니다.');</script>";
+        }
 
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
