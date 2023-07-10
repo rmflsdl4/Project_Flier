@@ -12,7 +12,7 @@
 
         mysqli_stmt_bind_param($stmt, 's', $id);
 
-        $result = mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
 
         if(mysqli_num_rows($result) > 0){
             mysqli_stmt_close($stmt);
