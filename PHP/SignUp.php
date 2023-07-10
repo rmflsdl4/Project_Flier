@@ -6,7 +6,7 @@
         $pw = $_POST['pw'];
         $confirm_pw = $_POST['confirm_pw'];
         $nick_name = $_POST['nick_name'];
-        
+
         $query = "INSERT INTO users(id, pw, nick_name) VALUES (?, ? ,?)";
 
         $stmt = mysqli_prepare($conn, $query);
@@ -17,14 +17,13 @@
 
         if (mysqli_affected_rows($conn) > 0) {
             echo "<script>alert('회원가입이 완료되었습니다.');</script>";
-            mysqli_stmt_close($stmt);
-            mysqli_close($conn);
-            header("Location: ../HTML/Login.html");
         }
         else{
-            mysqli_stmt_close($stmt);
-            mysqli_close($conn);
             echo "<script>alert('회원가입에 실패하였습니다.');</script>";
         }
+        
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
+        header("Location: https://web-project-flier-k19y2kljvm1qyo.sel4.cloudtype.app//Login.html");
     }
 ?>
