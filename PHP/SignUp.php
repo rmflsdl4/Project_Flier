@@ -1,6 +1,7 @@
 <?php
     include_once('DB_Connect.php');
-
+    echo "<script>alert({$_POST['id']});</script>";
+    
     if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
         $id = $_POST['id'];
         $pw = $_POST['pw'];
