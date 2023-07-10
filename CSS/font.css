@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "Tmon";
+    font-style: "normal";      
+    src: url("../HTML/Font/Tmon.ttf") format("truetype"),
+    url("../HTML/Font/Tmon.woff") format("woff"),
+    url("../HTML/Font/Tmon.woff2") format("woff2");
+}
+
+* {
+    font-family: 'Tmon';
+}

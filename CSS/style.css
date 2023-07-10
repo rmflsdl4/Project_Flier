@@ -1,1 +1,41 @@
+/* ALL */
+a{
+    text-decoration: none;
+    margin-right: 15px;
+    color: #C0C0C0;
+}
 
+#box{
+    border: 1px solid purple;
+}
+
+/* Main.html */
+#Main_BackGround{
+    background-color: #F5F5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#id, #pw{
+    width: 500px;
+    height: 70px;
+    border: 2px solid gray;
+    border-radius: 5px;
+    font-size: 20px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+#login{
+    width: 100px;
+    height: 30px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: auto;
+}
+#MainMenuBox{
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
