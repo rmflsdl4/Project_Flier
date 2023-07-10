@@ -16,7 +16,8 @@
         $result = mysqli_stmt_excute($stmt);
 
         if (mysqli_affected_rows($conn) > 0) {
-            echo '데이터가 성공적으로 삽입되었습니다.';
+            echo "<script>alert('회원가입이 완료되었습니다.');</script>";
+            header('../HTML/Login.html');
         }
 
         mysqli_stmt_close($stmt);
