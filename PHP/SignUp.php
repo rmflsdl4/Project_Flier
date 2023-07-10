@@ -27,7 +27,7 @@
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
         echo "<script>
-        window.location.href = https://web-project-flier-k19y2kljvm1qyo.sel4.cloudtype.app//Login.html
+        window.location.href = 'https://web-project-flier-k19y2kljvm1qyo.sel4.cloudtype.app/Login.html';
         </script>";
     }
 ?>
