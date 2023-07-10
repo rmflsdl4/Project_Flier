@@ -30,7 +30,7 @@ a:hover{
     outline: none;
 }
 #login{
-    font-size: 18px;
+    font-size: 17px;
     width: 100px;
     height: 30px;
     background-color: #4CAF50;
@@ -43,7 +43,7 @@ a:hover{
     background-color: #449947;
 }
 #MainMenuBox{
-    font-size: 18px;
+    font-size: 17px;
     height: 30px;
     display: flex;
     align-items: center;

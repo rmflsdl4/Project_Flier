@@ -1,13 +1,13 @@
 <html>
     <head>
         <title>Flier</title>
-        <link rel="stylesheet" href="../CSS/style.css">
-        <link rel="stylesheet" href="../CSS/font.css">
+        <link rel="stylesheet" href="CSS/style.css">
+        <link rel="stylesheet" href="CSS/font.css">
         <meta charset="utf-8">
     </head>
     <body id="Main_BackGround">
         <div>
-            <form>
+            <form action="../PHP/SignUp.php" method="POST">
                 <input id="id" type="text" name="id" placeholder="아이디">
                 <br>
                 <input id="pw" type="password" name="pw" placeholder="비밀번호">
@@ -17,7 +17,7 @@
                 <input id="nick_name" type="text" name="nick_name" placeholder="별명">
                 <br>
                 <div id="MainMenuBox">
-                    <a href="./Login.html">로그인 페이지로 이동</a>
+                    <a href="Login.html">로그인 페이지로 이동</a>
                     <button id="sign_up" type="submit">회원가입</button>
                 </div>
             </form>
