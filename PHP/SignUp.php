@@ -16,7 +16,9 @@
         $result = mysqli_stmt_execute($stmt);
 
         if (mysqli_affected_rows($conn) > 0) {
-            echo "<script>alert('회원가입이 완료되었습니다.');</script>";
+            echo "<script>
+            alert('회원가입이 완료되었습니다.');
+            </script>";
         }
         else{
             echo "<script>alert('회원가입에 실패하였습니다.');</script>";
@@ -24,6 +26,8 @@
         
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
-        header("Location: https://web-project-flier-k19y2kljvm1qyo.sel4.cloudtype.app//Login.html");
+        echo "<script>
+        window.location.href = https://web-project-flier-k19y2kljvm1qyo.sel4.cloudtype.app//Login.html
+        </script>";
     }
 ?>
