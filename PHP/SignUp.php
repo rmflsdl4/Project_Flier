@@ -7,7 +7,7 @@
         $confirm_pw = $_POST['confirm_pw'];
         $nick_name = $_POST['nick_name'];
 
-        $query = "SELECT * FROM users WHERE id = {$id}";
+        $query = "SELECT * FROM users WHERE id = ?";
         $stmt = mysqli_prepare($conn, $query);
 
         mysqli_stmt_bind_param($stmt, 's', $id);
