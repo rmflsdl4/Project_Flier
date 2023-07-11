@@ -89,7 +89,7 @@ function Normalization_Check(value){
                 boolValue = JSON.parse(response);
             }
         };
-        var data = 'value=' + encodeURIComponent(value);
+        var data = 'id=' + encodeURIComponent(value);
         xhr.send(data);
     }
     return boolValue;
