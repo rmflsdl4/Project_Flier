@@ -5,5 +5,5 @@
     $database = 'flier';
     $port = '32388';
 
-    $conn = mysqli_connect($host, $user, $password, $database, $port);
+    $conn = new mysqli($host, $user, $password, $database, $port);
 ?>
