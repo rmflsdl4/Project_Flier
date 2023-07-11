@@ -3,7 +3,7 @@
     function DuplicateCheck($value){
         echo $value;
     }
-    $id = $_POST['value'];
+    $id = $_GET['value'];
     $result = DuplicateCheck($id);
     echo $result;
     /*if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
