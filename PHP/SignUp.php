@@ -8,18 +8,18 @@
         $port = '32388';
 
         $conn = new mysqli($host, $user, $password, $database, $port);
-        
+
         $query = "SELECT * FROM users WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("s", $value);
         $stmt->execute();
         $result = $stmt->get_result();
-        $bool = ($result->num_rows > 0);
+        $bool = !($result->num_rows > 0);
         $stmt->close();
         $conn->close();
         return $bool;
     }
-    $id = $_POST['value'];
+    $id = $_POST['id'];
     $result = DuplicateCheck($id);
     $response = json_encode($result);
     echo $response;
