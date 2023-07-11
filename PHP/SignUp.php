@@ -1,6 +1,14 @@
 <?php
-    include_once('DB_Connect.php');
+    //include_once('DB_Connect.php');
     function DuplicateCheck($value){
+        $host = 'svc.sel4.cloudtype.app';
+        $user = 'root';
+        $password = 'tkfkdgo3@';
+        $database = 'flier';
+        $port = '32388';
+
+        $conn = new mysqli($host, $user, $password, $database, $port);
+        
         $query = "SELECT * FROM users WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("s", $value);
