@@ -53,14 +53,10 @@ a:hover{
     font-size: 18px;
     width: 100px;
     height: 30px;
-    background-color: #4CAF50;
+    background-color: #347236;
     border: none;
     color: white;
-    cursor: pointer;
     margin-left: auto;
-}
-#sign_up:hover{
-    background-color: #449947;
 }
 .MessageBox{
     display: flex;

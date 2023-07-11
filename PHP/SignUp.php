@@ -1,7 +1,25 @@
 <?php
     include_once('DB_Connect.php');
-    
-    if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
+    function DuplicateCheck($value){
+        $query = "SELECT * FROM users WHERE id = ?";
+        $stmt = mysqli_prepare($conn, $query);
+
+        mysqli_stmt_bind_param($stmt, 's', $value);
+        mysqli_stmt_execute($stmt);
+        
+        $rowCnt = mysqli_stmt_num_rows($stmt);
+
+        if($rowCnt > 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    $id = $_POST['value'];
+    $result = DuplicateCheck($id);
+    echo $result;
+    /*if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
         $id = $_POST['id'];
         $pw = $_POST['pw'];
         $confirm_pw = $_POST['confirm_pw'];
@@ -44,5 +62,5 @@
             window.location.href = 'https://web-project-flier-k19y2kljvm1qyo.sel4.cloudtype.app/Login.html';
             </script>";
         }
-    }
+    }*/
 ?>
