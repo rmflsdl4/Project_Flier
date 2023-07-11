@@ -77,19 +77,21 @@ function Input_Data_Check_To_Submit(){
 }
 function Normalization_Check(value){
     let id_normal = /^[A-Za-z]{1}[A-Za-z0-9_-]{3,19}$/ // 반드시 영문으로 시작 숫자+언더바/하이픈 허용 4~20자리
-
+    alert(value);
     if(id_normal.test(value)){
         
         var xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://port-9000-php-k19y2kljvm1qyo.sel4.cloudtype.app/SignUp.php?value=' + encodeURIComponent(value), true);
-       
+        xhr.open('POST', 'https://port-9000-php-k19y2kljvm1qyo.sel4.cloudtype.app/SignUp.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            var response = xhr.responseText;
-            return response;
-        }
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = xhr.responseText;
+                alert(response);
+            }
         };
-        xhr.send();
+        var data = 'value=' + encodeURIComponent(value);
+        xhr.send(data);
+
     }
     return false;
 }
