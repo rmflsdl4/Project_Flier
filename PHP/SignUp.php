@@ -13,7 +13,8 @@
     }
     $id = $_POST['value'];
     $result = DuplicateCheck($id);
-    echo $result;
+    $response = json_encode($result);
+    echo $response;
     /*if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
         $id = $_POST['id'];
         $pw = $_POST['pw'];
