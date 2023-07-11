@@ -4,7 +4,7 @@
         $query = "SELECT * FROM users WHERE id = ?";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("s", $value);
-        $stmt->excute();
+        $stmt->execute();
         $result = $stmt->get_result();
         $bool = ($result->num_rows > 0);
         $stmt->close();
