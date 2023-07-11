@@ -30,7 +30,7 @@ function Input_Check(element){
     else{
         element.style.marginBottom = "0px";
     }
-    // 분기점 별 함수 실행
+    // 분기별 함수 실행
     if(element.name === "id"){
         if(Normalization_Check(element.value)){
             img.src = "Image/check.png";
