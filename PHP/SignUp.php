@@ -1,17 +1,7 @@
 <?php
     include_once('DB_Connect.php');
     function DuplicateCheck($value){
-        $query = "SELECT * FROM users WHERE id = {$value}";
-        $result = $conn->query($query);
-        $bool = true;
-        if($result->num_rows > 0){
-            $bool = false;
-        }
-        else{
-            $bool = true;
-        }
-        $conn->close();
-        return $bool;
+        echo $value;
     }
     $id = $_POST['value'];
     $result = DuplicateCheck($id);
