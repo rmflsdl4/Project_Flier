@@ -1,9 +1,17 @@
 <?php
     include_once('DB_Connect.php');
     function DuplicateCheck($value){
-        echo $value;
+        $query = "SELECT * FROM users WHERE id = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->bind_param("s", $value);
+        $stmt->excute();
+        $result = $stmt->get_result();
+        $bool = ($result->num_rows > 0);
+        $stmt->close();
+        $conn->close();
+        return $bool;
     }
-    $id = $_GET['value'];
+    $id = $_POST['value'];
     $result = DuplicateCheck($id);
     echo $result;
     /*if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
