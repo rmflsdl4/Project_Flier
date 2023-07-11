@@ -14,13 +14,13 @@
         $stmt->bind_param("s", $value);
         $stmt->execute();
         $result = $stmt->get_result();
-        $bool = !($result->num_rows > 0);
+        $bool = ($result->num_rows == 0);
         $stmt->close();
         $conn->close();
         return $bool;
     }
     $id = $_POST['id'];
-    $result = DuplicateCheck($id);
+    $result = !DuplicateCheck($id);
     $response = json_encode($result);
     echo $response;
     /*if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
