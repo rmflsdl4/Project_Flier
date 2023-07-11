@@ -20,7 +20,7 @@
         return $bool;
     }
     $id = $_POST['id'];
-    $result = !DuplicateCheck($id);
+    $result = DuplicateCheck($id);
     $response = json_encode($result);
     echo $response;
     /*if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
