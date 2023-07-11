@@ -77,7 +77,7 @@ function Input_Data_Check_To_Submit(){
 }
 function Normalization_Check(value){
     let id_normal = /^[A-Za-z]{1}[A-Za-z0-9_-]{3,19}$/ // 반드시 영문으로 시작 숫자+언더바/하이픈 허용 4~20자리
-    alert(value);
+    var boolValue = false;
     if(id_normal.test(value)){
         
         var xhr = new XMLHttpRequest();
@@ -86,12 +86,11 @@ function Normalization_Check(value){
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
                 var response = xhr.responseText;
-                alert(response);
+                boolValue = JSON.parse(response);
             }
         };
         var data = 'value=' + encodeURIComponent(value);
         xhr.send(data);
-
     }
-    return false;
+    return boolValue;
 }
