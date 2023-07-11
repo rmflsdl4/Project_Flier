@@ -1,6 +1,6 @@
 <?php
     include_once('DB_Connect.php');
-    function DuplicateCheck($value){
+    /*function DuplicateCheck($value){
         $query = "SELECT * FROM users WHERE id = ?";
         $stmt = mysqli_prepare($conn, $query);
 
@@ -15,10 +15,10 @@
         else{
             return true;
         }
-    }
+    }*/
     $id = $_POST['value'];
-    $result = DuplicateCheck($id);
-    echo $result;
+    //$result = DuplicateCheck($id);
+    echo $id;
     /*if(isset($_POST['id'], $_POST['pw'], $_POST['confirm_pw'], $_POST['nick_name'])){
         $id = $_POST['id'];
         $pw = $_POST['pw'];
