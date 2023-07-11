@@ -25,7 +25,6 @@ a:hover{
     border: 2px solid gray;
     border-radius: 5px;
     font-size: 20px;
-    margin-bottom: 10px;
     padding: 30px;
     outline: none;
 }
@@ -62,4 +61,15 @@ a:hover{
 }
 #sign_up:hover{
     background-color: #449947;
+}
+.MessageBox{
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.MessageBox > Img{
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
 }
