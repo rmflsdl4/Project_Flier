@@ -32,7 +32,7 @@ function Input_Check(element){
     }
     // 분기별 함수 실행
     if(element.name === "id"){
-        if(Normalization_Check(element.value)){
+        if(ID_Check(element.value)){
             img.src = "Image/check.png";
             textNode.nodeValue = "사용 가능한 아이디입니다.";
         }
@@ -42,10 +42,16 @@ function Input_Check(element){
         }
     }
     else if(element.name === "pw"){
-
+        img.src = "Image/dcheck.png";
+        textNode.nodeValue = "사용 불가능한 비밀번호입니다.";
+    }
+    else if(element.name === "confirm_pw"){
+        img.src = "Image/dcheck.png";
+        textNode.nodeValue = "비밀번호가 일치하지 않습니다.";
     }
     else if(element.name === "nick_name"){
-
+        img.src = "Image/dcheck.png";
+        textNode.nodeValue = "별명에 사용할 수 없는 문자입니다.";
     }
     
     parentElement.appendChild(div);
@@ -74,25 +80,4 @@ function Input_Data_Check_To_Submit(){
     submitButton.disabled = false;
     submitButton.style.backgroundColor = "#4CAF50";
     submitButton.style.cursor = "pointer";
-}
-function Normalization_Check(value){
-    let id_normal = /^[A-Za-z]{1}[A-Za-z0-9_-]{3,19}$/ // 반드시 영문으로 시작 숫자+언더바/하이픈 허용 4~20자리
-    var boolValue = false;
-    if(id_normal.test(value)){
-        
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://port-9000-php-k19y2kljvm1qyo.sel4.cloudtype.app/SignUp.php', true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                var response = xhr.responseText;
-                boolValue = JSON.parse(response);
-                alert(boolValue);
-            }
-        };
-        var data = 'id=' + encodeURIComponent(value);
-        xhr.send(data);
-       
-    }
-    
-    return boolValue;
 }
