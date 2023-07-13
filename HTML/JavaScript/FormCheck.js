@@ -1,3 +1,5 @@
+let idc, pwc, cpwc, nnc;
+
 function Input_Check(element){
     Input_Data_Check_To_Submit();
     // 패턴 체크
@@ -10,6 +12,9 @@ function Input_Check(element){
     let childElement = parentElement.firstElementChild;
 
     var len = element.value.length;
+
+    let pw = document.getElementById('pw');
+    let confirm_pw = document.getElementById('confirm_pw');
 
     div.setAttribute('class', 'MessageBox');
 
@@ -31,29 +36,77 @@ function Input_Check(element){
         element.style.marginBottom = "0px";
     }
     // 분기별 함수 실행
+
     if(element.name === "id"){
-        if(checkInput(element.name, element.value)){
-            img.src = "Image/check.png";
-            textNode.nodeValue = "사용 가능한 아이디입니다.";
-        }
-        else{
-            img.src = "Image/dcheck.png";
-            textNode.nodeValue = "사용 불가능한 아이디입니다.";
-        }
+        Value_Check(element.name, element.value, null)
+            .then(result => {
+                idc = result;
+                console.log(idc, pwc, cpwc, nnc);
+                if(result){
+                    img.src = "Image/check.png";
+                    textNode.nodeValue = "사용 가능한 아이디입니다.";
+                }
+                else{
+                    img.src = "Image/dcheck.png";
+                    textNode.nodeValue = "사용 불가능한 아이디입니다.";
+                }
+            });
     }
     else if(element.name === "pw"){
-        img.src = "Image/dcheck.png";
-        textNode.nodeValue = "사용 불가능한 비밀번호입니다.";
+        pw.value = element.value;
+        Value_Check(element.name, element.value, null)
+            .then(result => {
+                pwc = result;
+                console.log(idc, pwc, cpwc, nnc);
+                if(result){
+                    img.src = "Image/check.png";
+                    textNode.nodeValue = "사용 가능한 비밀번호입니다.";
+                }
+                else{
+                    img.src = "Image/dcheck.png";
+                    textNode.nodeValue = "사용 불가능한 비밀번호입니다.";
+                }
+            });
     }
     else if(element.name === "confirm_pw"){
-        img.src = "Image/dcheck.png";
-        textNode.nodeValue = "비밀번호가 일치하지 않습니다.";
+        confirm_pw = element.value;
+        Value_Check(element.name, pw.value, element.value)
+            .then(result => {
+                cpwc = result;
+                console.log(idc, pwc, cpwc, nnc);
+                if(result){
+                    img.src = "Image/check.png";
+                    textNode.nodeValue = "비밀번호가 일치합니다.";
+                }
+                else{
+                    img.src = "Image/dcheck.png";
+                    textNode.nodeValue = "비밀번호가 일치하지 않습니다.";
+                }
+            });
     }
     else if(element.name === "nick_name"){
-        img.src = "Image/dcheck.png";
-        textNode.nodeValue = "별명에 사용할 수 없는 문자입니다.";
+        Value_Check(element.name, element.value, null)
+            .then(result => {
+                nnc = result;
+                console.log(idc, pwc, cpwc, nnc);
+                if(result){
+                    img.src = "Image/check.png";
+                    textNode.nodeValue = "사용할 수 있는 별명입니다.";
+                }
+                else{
+                    img.src = "Image/dcheck.png";
+                    textNode.nodeValue = "중복된 별명입니다.";
+                }
+            });
     }
-    
+
+    if(pw.value !== confirm_pw.value && pw.value !== null && confirm_pw.value !== null){
+        cpwc = false;
+    }
+    else{
+        cpwc = true;
+    }
+
     parentElement.appendChild(div);
     div.appendChild(img);
     div.appendChild(span);
@@ -81,22 +134,32 @@ function Input_Data_Check_To_Submit(){
     submitButton.style.backgroundColor = "#4CAF50";
     submitButton.style.cursor = "pointer";
 }
-function checkInput(name, value) {
-    fetch('/check-input', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ name, value })
-    })
-      .then(response => response.json())
-      .then(data => {
-        const result = data.result;
-        
-        return result;
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-  }
+function Value_Check(name, value1, value2) {
+    return new Promise((resolve, reject) => {
+        fetch('/check-input', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, value1, value2 })
+        })
+            .then(response => response.json())
+            .then(data => {
+                const result = data.result;
+                resolve(result);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
+
+function All_Values_Check(){
+    if(idc && pwc && cpwc && nnc){
+        event.preventDefault();
+        return true;
+    }
+    alert('입력값을 다시 확인해 주세요.');
+    return false;
+}
   
