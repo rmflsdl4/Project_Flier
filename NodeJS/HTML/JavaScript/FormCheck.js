@@ -121,8 +121,8 @@ function InitForm(){
 }
 function Input_Data_Check_To_Submit(){
     let inputData = document.getElementsByTagName("input");
-    let submitButton = document.getElementById("sign_up");
-
+    let submitButton = document.getElementById("sign_up") ? document.getElementById("sign_up"):document.getElementById("login");
+    
     for(let i = 0; i < inputData.length; i++){
         if(inputData[i].value === ""){
             submitButton.disabled = true;
