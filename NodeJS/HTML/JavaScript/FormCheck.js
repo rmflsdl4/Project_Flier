@@ -17,18 +17,23 @@ function Input_Check(element){
     let confirm_pw = document.getElementById('confirm_pw');
 
     div.setAttribute('class', 'MessageBox');
+    
+    function MessageBox_Check(){
+        const nextElement = childElement.nextElementSibling; // div 태그 id: MessageBox
 
-    while (childElement !== null) {
-        const nextElement = childElement.nextElementSibling;
-        
-        if (nextElement !== null) {
-          parentElement.removeChild(nextElement);
+        if(nextElement !== null){
+            parentElement.removeChild(nextElement);
         }
-      
-        childElement = nextElement;
+        parentElement.appendChild(div);
+        div.appendChild(img);
+        div.appendChild(span);
+        span.appendChild(textNode);
     }
+
     // 빈칸이면 더 이상 실행하지 않고 margin 값 주고 종료
     if(len <= 0){
+        const nextElement = childElement.nextElementSibling; // div 태그 id: MessageBox
+        parentElement.removeChild(nextElement);
         element.style.marginBottom = "10px";
         return;
     }
@@ -41,7 +46,6 @@ function Input_Check(element){
         Value_Check(element.name, element.value, null)
             .then(result => {
                 idc = result;
-                console.log(idc, pwc, cpwc, nnc);
                 if(result){
                     img.src = "Image/check.png";
                     textNode.nodeValue = "사용 가능한 아이디입니다.";
@@ -50,6 +54,7 @@ function Input_Check(element){
                     img.src = "Image/dcheck.png";
                     textNode.nodeValue = "사용 불가능한 아이디입니다.";
                 }
+                MessageBox_Check();
             });
     }
     else if(element.name === "pw"){
@@ -57,7 +62,6 @@ function Input_Check(element){
         Value_Check(element.name, element.value, null)
             .then(result => {
                 pwc = result;
-                console.log(idc, pwc, cpwc, nnc);
                 if(result){
                     img.src = "Image/check.png";
                     textNode.nodeValue = "사용 가능한 비밀번호입니다.";
@@ -66,6 +70,7 @@ function Input_Check(element){
                     img.src = "Image/dcheck.png";
                     textNode.nodeValue = "사용 불가능한 비밀번호입니다.";
                 }
+                MessageBox_Check();
             });
     }
     else if(element.name === "confirm_pw"){
@@ -73,7 +78,6 @@ function Input_Check(element){
         Value_Check(element.name, pw.value, element.value)
             .then(result => {
                 cpwc = result;
-                console.log(idc, pwc, cpwc, nnc);
                 if(result){
                     img.src = "Image/check.png";
                     textNode.nodeValue = "비밀번호가 일치합니다.";
@@ -82,13 +86,13 @@ function Input_Check(element){
                     img.src = "Image/dcheck.png";
                     textNode.nodeValue = "비밀번호가 일치하지 않습니다.";
                 }
+                MessageBox_Check();
             });
     }
     else if(element.name === "nick_name"){
         Value_Check(element.name, element.value, null)
             .then(result => {
                 nnc = result;
-                console.log(idc, pwc, cpwc, nnc);
                 if(result){
                     img.src = "Image/check.png";
                     textNode.nodeValue = "사용할 수 있는 별명입니다.";
@@ -97,6 +101,7 @@ function Input_Check(element){
                     img.src = "Image/dcheck.png";
                     textNode.nodeValue = "중복된 별명입니다.";
                 }
+                MessageBox_Check();
             });
     }
 
@@ -106,11 +111,6 @@ function Input_Check(element){
     else{
         cpwc = true;
     }
-
-    parentElement.appendChild(div);
-    div.appendChild(img);
-    div.appendChild(span);
-    span.appendChild(textNode);
 }
 function InitForm(){
     let arr = document.getElementsByTagName("input");
