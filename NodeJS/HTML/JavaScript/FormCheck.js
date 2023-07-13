@@ -2,6 +2,7 @@ let idc, pwc, cpwc, nnc;
 
 function Input_Check(element){
     Input_Data_Check_To_Submit();
+    PW_T();
     // 패턴 체크
     let div = document.createElement("div");
     let img = document.createElement("img");
@@ -30,6 +31,22 @@ function Input_Check(element){
         span.appendChild(textNode);
     }
 
+    // 비밀번호 확인 아이콘, 메세지 변경
+    function PW_T(){
+        let arr = document.getElementsByTagName("input");
+        if(arr[1].value !== "" && arr[2].value !== ""){
+            let msgBox = arr[2].nextElementSibling;
+            if(msgBox !== null){
+                if(arr[1].value !== arr[2].value){
+                    msgBox.firstElementChild.src = "Image/dcheck.png";
+                    msgBox.children[1].textContent = "비밀번호가 일치하지 않습니다.";
+                    return;
+                }
+                msgBox.firstElementChild.src = "Image/check.png";
+                msgBox.children[1].textContent = "비밀번호가 일치합니다.";
+            }
+        }
+    }
     // 빈칸이면 더 이상 실행하지 않고 margin 값 주고 종료
     if(len <= 0){
         const nextElement = childElement.nextElementSibling; // div 태그 id: MessageBox
@@ -40,8 +57,8 @@ function Input_Check(element){
     else{
         element.style.marginBottom = "0px";
     }
-    // 분기별 함수 실행
 
+    // 분기별 함수 실행
     if(element.name === "id"){
         Value_Check(element.name, element.value, null)
             .then(result => {
@@ -122,7 +139,7 @@ function InitForm(){
 function Input_Data_Check_To_Submit(){
     let inputData = document.getElementsByTagName("input");
     let submitButton = document.getElementById("sign_up") ? document.getElementById("sign_up"):document.getElementById("login");
-    
+
     for(let i = 0; i < inputData.length; i++){
         if(inputData[i].value === ""){
             submitButton.disabled = true;
