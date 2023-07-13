@@ -53,21 +53,34 @@ app.post('/sign-up', (req, res) => {
 
     signup.Add_User(id, pw, nick_name);
     
-    console.log('신규 회원 정보 [ ID - ${id} / NAME - ${nick_name} ]');
+    console.log(`신규 회원 정보 [ ID - ${id} / NAME - ${nick_name} ]`);
 
     res.send("<script>alert('회원가입이 완료되었습니다.'); location.href='Login.html';</script>");
 });
 app.post('/login', (req, res) => {
     const now = new Date();
-    const formattedDate = now.toISOString();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+
+    const formattedDate = `${year}년 ${month}월 ${day}일 ${hours}시 ${minutes}분 ${seconds}초`;
 
     const { id, pw } = req.body;
 
-    login.Login(id, pw);
-
-    console.log('회원 [ ${id} ] 접속.... 접속 시간 : ${formattedDate}');
-
-    res.send("<script>alert('로그인에 성공하였습니다.'); location.href='Main.html';</script>");
+    login.Login(id, pw)
+        .then((state) => {
+            if(state === 1){
+                console.log(`회원 [ ${id} ] 접속.... 접속 시간 : ${formattedDate}`);
+        
+                res.send("<script>alert('로그인에 성공하였습니다.'); location.href='Main.html';</script>");
+            }
+            else{
+                res.send("<script>alert('로그인에 실패하였습니다.'); location.href='Login.html';</script>");
+            }
+        })
 })
 // 포트 설정
 app.listen(2098, function(){
