@@ -4,11 +4,11 @@ var app = express();
 var fs = require('fs');
 const normalization = require('./JavaScript/Normalization_Check.js');
 
-app.use(express.static('../HTML'))
+app.use(express.static('HTML'))
 app.use(express.json());
 // 라우팅 설정
 app.get('/', function(req, res){
-    fs.readFile('../HTML/Login.html', function(error, data){
+    fs.readFile('HTML/Login.html', function(error, data){
         if(error){
             console.log(error);
         }
