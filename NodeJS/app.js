@@ -4,6 +4,7 @@ var app = express();
 var fs = require('fs');
 const normalization = require('./JavaScript/Normalization_Check.js');
 const signup = require('./JavaScript/SignUp.js');
+const login = require('./JavaScript/Login.js');
 
 app.use(express.static('HTML'))
 app.use(express.json());
@@ -52,8 +53,22 @@ app.post('/sign-up', (req, res) => {
 
     signup.Add_User(id, pw, nick_name);
     
+    console.log('신규 회원 정보 [ ID - ${id} / NAME - ${nick_name} ]');
+
     res.send("<script>alert('회원가입이 완료되었습니다.'); location.href='Login.html';</script>");
 });
+app.post('/login', (req, res) => {
+    const now = new Date();
+    const formattedDate = now.toISOString();
+
+    const { id, pw } = req.body;
+
+    login.Login(id, pw);
+
+    console.log('회원 [ ${id} ] 접속.... 접속 시간 : ${formattedDate}');
+
+    res.send("<script>alert('로그인에 성공하였습니다.'); location.href='Main.html';</script>");
+})
 // 포트 설정
 app.listen(2098, function(){
     console.log('서버 구동');
