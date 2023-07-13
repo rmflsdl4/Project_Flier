@@ -7,6 +7,7 @@ const signup = require('./JavaScript/SignUp.js');
 
 app.use(express.static('HTML'))
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 // 라우팅 설정
 app.get('/', function(req, res){
     fs.readFile('HTML/Login.html', function(error, data){
@@ -47,9 +48,11 @@ app.post('/check-input', (req, res) => {
     }
 });
 app.post('/sign-up', (req, res) => {
-    const { id, pw, confirm_pw, nick_name } = req.body;
+    const { id, pw, nick_name } = req.body;
 
-    signup.Add_User(id, pw, confirm_pw, nick_name);
+    signup.Add_User(id, pw, nick_name);
+    
+    res.send("<script>alert('회원가입이 완료되었습니다.'); location.href='Login.html';</script>");
 });
 // 포트 설정
 app.listen(2098, function(){
