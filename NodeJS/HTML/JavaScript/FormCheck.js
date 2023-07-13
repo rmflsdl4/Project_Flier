@@ -156,7 +156,6 @@ function Value_Check(name, value1, value2) {
 
 function All_Values_Check(){
     if(idc && pwc && cpwc && nnc){
-        event.preventDefault();
         return true;
     }
     alert('입력값을 다시 확인해 주세요.');
