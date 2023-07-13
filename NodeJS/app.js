@@ -18,6 +18,6 @@ app.get('/', function(req, res){
 });
 
 // 포트 설정
-app.listen(3000, function(){
+app.listen(2098, function(){
     console.log('서버 구동');
 })
