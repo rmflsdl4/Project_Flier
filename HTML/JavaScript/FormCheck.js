@@ -32,7 +32,7 @@ function Input_Check(element){
     }
     // 분기별 함수 실행
     if(element.name === "id"){
-        if(ID_Check(element.value)){
+        if(checkInput(element.name, element.value)){
             img.src = "Image/check.png";
             textNode.nodeValue = "사용 가능한 아이디입니다.";
         }
@@ -81,3 +81,22 @@ function Input_Data_Check_To_Submit(){
     submitButton.style.backgroundColor = "#4CAF50";
     submitButton.style.cursor = "pointer";
 }
+function checkInput(name, value) {
+    fetch('/check-input', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, value })
+    })
+      .then(response => response.json())
+      .then(data => {
+        const result = data.result;
+        
+        return result;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+  
