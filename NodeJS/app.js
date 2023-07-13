@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var fs = require('fs');
 const normalization = require('./JavaScript/Normalization_Check.js');
+const signup = require('./JavaScript/SignUp.js');
 
 app.use(express.static('HTML'))
 app.use(express.json());
@@ -18,6 +19,7 @@ app.get('/', function(req, res){
         }
     });
 });
+// 회원가입 입력값 검사
 app.post('/check-input', (req, res) => {
     const { name, value1, value2 } = req.body;
     
@@ -44,7 +46,11 @@ app.post('/check-input', (req, res) => {
             });
     }
 });
+app.post('/sign-up', (req, res) => {
+    const { id, pw, confirm_pw, nick_name } = req.body;
 
+    signup.Add_User(id, pw, confirm_pw, nick_name);
+});
 // 포트 설정
 app.listen(2098, function(){
     console.log('서버 구동');
