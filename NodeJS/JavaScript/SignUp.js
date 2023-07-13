@@ -3,16 +3,16 @@ const database = require('../database.js');
 async function User_Insert(id, pw, nick_name){
     await database.Connect();
     
-    if(id_normal.test(value)){
-        const query = 'INSERT INTO users(id, pw, nick_name) VALUES (?, ?, ?)';
-        const values = [id, pw, nick_name];
+    const query = 'INSERT INTO users(id, pw, nick_name) VALUES (?, ?, ?)';
+    const values = [id, pw, nick_name];
 
-        const result = await database.Query(query, values);
+    const result = await database.Query(query, values);
 
-        if (result instanceof Error) {
-            return;
-        }
-    };
+    if (result instanceof Error) {
+        return;
+    }
+        
+    
     database.Close();
 }
 
