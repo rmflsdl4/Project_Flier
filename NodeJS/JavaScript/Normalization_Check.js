@@ -40,7 +40,7 @@ async function Nick_Name_Normalization_Check(value){
         const query = 'SELECT COUNT(*) AS count FROM users WHERE nick_name = ?';
 
         const result = await database.Query(query, value);
-        console.log(result);
+        
         if (result instanceof Error) {
             return;
         }
