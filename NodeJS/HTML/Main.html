@@ -3,9 +3,26 @@
         <title>Flier</title>
         <link rel="stylesheet" href="CSS/style.css">
         <link rel="stylesheet" href="CSS/font.css">
+        <script src="JavaScript/Board.js"></script>
         <meta charset="utf-8">
     </head>
-    <body id="Main_BackGround">
-        이거슨 메인페이지 입니다.
+    <body style="background-color: #F5F5F5;" onload="Board_State_Init();">
+        <center>
+            <table id="Board">
+                <tr>
+                    <th class="Board_Menu" colspan="1" style="width: 10%;" onclick="Board_Select();">공지사항</th>
+                    <th class="Board_Menu" colspan="1" style="width: 10%;" onclick="Board_Select();">자유게시판</th>
+                    <th class="Board_Menu" colspan="1" style="width: 10%;" onclick="Board_Select();">질문게시판</th>
+                    <th colspan="7" style="width: 70%;"></th>
+                </tr>
+                <tr>
+                    <th class="Board_Title" colspan="1" style="text-align: center; width: 10%;">번호</th>
+                    <th class="Board_Title" colspan="4" style="text-align: center; width: 40%;">제목</th>
+                    <th class="Board_Title" colspan="2" style="text-align: center; width: 20%;">작성자</th>
+                    <th class="Board_Title" colspan="2" style="text-align: center; width: 20%;">등록일</th>
+                    <th class="Board_Title" colspan="1" style="text-align: center; width: 10%;">조회수</th>
+                </tr>
+            </table>
+        </center>
     </body>
 </html>
