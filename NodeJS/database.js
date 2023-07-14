@@ -1,42 +1,28 @@
 const mysql = require('mysql');
 
-let connection;
+let pool = null;
 
 function DB_Connect(){
-    if(!connection){
-        connection = mysql.createConnection({
-            host: 'svc.sel4.cloudtype.app',
-            user: 'root',
-            password: 'tkfkdgo3@',
-            database: 'flier',
-            port: '32388'
-        });
-
-        return new Promise((resolve, reject) => {
-            connection.connect(error => {
-                if(error){
-                    reject(error);
-                }
-                else{
-                    resolve();
-                }
-            });
-        });
-    } 
-    else{
-        return Promise.resolve();
-    }
-    
+    pool = mysql.createPool({
+        connectionLimit: 10,
+        host: 'svc.sel4.cloudtype.app',
+        user: 'root',
+        password: 'tkfkdgo3@',
+        database: 'flier',
+        port: '32388'
+    });
 }
 function DB_Close(){
-    if (connection) {
-        connection.end();
-        connection = null;
-    }
+    pool.end((error) => {
+        if(error){
+            console.error('msg: ', error);
+            return;
+        }
+    })
 }
 async function DB_Query(query, value){
     return await new Promise((resolve, reject) => {
-        connection.query(query, value, function(error, rows){
+        pool.query(query, value, function(error, rows){
             if(error){
                 reject(error);
                 return;
