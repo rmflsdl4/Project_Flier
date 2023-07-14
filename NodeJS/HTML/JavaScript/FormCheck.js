@@ -112,7 +112,7 @@ function Input_Check(element){
                 nnc = result;
                 if(result){
                     img.src = "Image/check.png";
-                    textNode.nodeValue = "사용할 수 있는 별명입니다.";
+                    textNode.nodeValue = "사용 가능한 별명입니다.";
                 }
                 else{
                     img.src = "Image/dcheck.png";
