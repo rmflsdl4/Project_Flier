@@ -5,6 +5,7 @@ var fs = require('fs');
 const normalization = require('./JavaScript/Normalization_Check.js');
 const signup = require('./JavaScript/SignUp.js');
 const login = require('./JavaScript/Login.js');
+const posts = require('./JavaScript/Get_Post.js');
 
 app.use(express.static('HTML'))
 app.use(express.json());
@@ -81,6 +82,11 @@ app.post('/login', (req, res) => {
                 res.send("<script>alert('로그인에 실패하였습니다.'); location.href='Login.html';</script>");
             }
         })
+})
+app.post('/posts-import', async (req, res) => {
+    const data = await posts.Get();
+    
+    res.send(data);
 })
 // 포트 설정
 app.listen(2098, function(){
