@@ -85,7 +85,10 @@ a:hover{
     height: 30px;
     border: 1px solid gray;
 }
-
+.add_td_Tag{
+	text-align: center;
+	border: 1px solid gray;
+}
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
