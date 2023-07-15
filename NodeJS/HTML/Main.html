@@ -4,16 +4,10 @@
         <link rel="stylesheet" href="CSS/m_style.css">
         <link rel="stylesheet" href="CSS/font.css">
         <script src="JavaScript/Board.js"></script>
-        <script src="JavaScript/WebSocket.js"></script>
-        <script> 
-            webSocket.onopen =  function(){
-                Board_State_Init();
-            }
-        </script>
         <meta charset="utf-8">
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body style="background-color: #F5F5F5;">
+    <body style="background-color: #F5F5F5;" onload="Board_State_Init();">
         <center>
             <table id="Board">
                 <tr>
