@@ -8,10 +8,6 @@ a:hover{
     border-bottom: 1px solid #C0C0C0;
 }
 
-#box{
-    border: 1px solid purple;
-}
-
 /* Main.html */
 #Main_BackGround{
     background-color: #F5F5F5;
@@ -91,6 +87,19 @@ a:hover{
 }
 .add_td_Tag:hover{
 	cursor: pointer;
+}
+
+/* Post */
+#post{
+    width: 800px;
+    border: 1px solid gray;
+    text-align: center;
+    border-collapse: collapse;
+    font-size: 18px;
+}
+#post td, #post th{
+    padding: 10px;
+    border: 1px solid gray;
 }
 
 /* 반응형 스타일 */
