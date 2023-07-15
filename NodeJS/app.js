@@ -4,7 +4,7 @@ const wsModule = require('ws');
 const normalization = require('./JavaScript/Normalization_Check.js');
 const signup = require('./JavaScript/SignUp.js');
 const login = require('./JavaScript/Login.js');
-const posts = require('./JavaScript/Get_Post.js');
+const posts = require('./JavaScript/Post.js');
 const database = require('./database.js');
 
 // 모듈에서 사용할 로직들
@@ -108,8 +108,14 @@ app.post('/login', (req, res) => {
         })
 })
 app.post('/posts-import', async (req, res) => {
-    const data = await posts.Get();
+    const data = await posts.Get_List();
     
 
+    res.send(data);
+})
+app.post('/view-post', async (req, res) => {
+    const { post_id } = req.body;
+    await posts.Add_View_Count(post_id);
+    const data = await posts.Get_Post(post_id);
     res.send(data);
 })
