@@ -44,12 +44,6 @@ webSocketServer.on('connection', (ws, request) => {
 
 // 라우팅 설정
 
-app.use((req, res, next) => {
-    if(!req.session.ip){
-        req.session.ip = req.ip;
-    }
-    next();
-})
 
 app.get('/', function(req, res){
     fs.readFile('HTML/Login.html', function(error, data){
