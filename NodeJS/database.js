@@ -4,19 +4,24 @@ let pool = null;
 
 function DB_Connect(){
     pool = mysql.createPool({
-        connectionLimit: 10,
+        connectionLimit: 20,
         host: 'svc.sel4.cloudtype.app',
         user: 'root',
         password: 'tkfkdgo3@',
         database: 'flier',
-        port: '32388'
+        port: '32388',
+        charset: 'UTF8MB4'
     });
+    console.log('데이터베이스 pool 생성');
 }
 function DB_Close(){
     pool.end((error) => {
         if(error){
             console.error('msg: ', error);
             return;
+        }
+        else{
+            console.log('데이터베이스 pool 종료');
         }
     })
 }

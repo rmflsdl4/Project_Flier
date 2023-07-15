@@ -1,16 +1,66 @@
 // 사용 모듈 로드
-var express = require('express');
-var app = express();
-var fs = require('fs');
+const express = require('express');
+const session = require('express-session');
+const wsModule = require('ws');
 const normalization = require('./JavaScript/Normalization_Check.js');
 const signup = require('./JavaScript/SignUp.js');
 const login = require('./JavaScript/Login.js');
 const posts = require('./JavaScript/Get_Post.js');
+const database = require('./database.js');
+
+// 모듈에서 사용할 로직들
+const app = express();
+var fs = require('fs');
 
 app.use(express.static('HTML'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// 서버 구동
+const httpServer = app.listen(2098, function(){
+    console.log('서버 구동');
+});
+
+const webSocketServer = new wsModule.Server({ server: httpServer });
+
+const clients = new Set();
+
+// 소켓 설정
+webSocketServer.on('connection', (ws, request) => {
+    if(clients.has(ws)){
+        ws.close();
+        return;
+    }
+
+    clients.add(ws);
+    ws.send('현재 접속자 수 - ' + clients.size);
+
+    database.Connect();
+
+    ws.on('close', () => {
+        clients.delete(ws);
+        database.Close();
+    })
+})
+
+
+
+// 세션 설정
+app.use(session({
+    secret: 'secretkey',
+    resave: false,
+    saveUninitialized: true
+}));
+
 // 라우팅 설정
+
+app.use((req, res, next) => {
+    if(!req.session.ip){
+        req.session.ip = req.ip;
+    }
+    next();
+})
+
 app.get('/', function(req, res){
     fs.readFile('HTML/Login.html', function(error, data){
         if(error){
@@ -43,6 +93,7 @@ app.post('/check-input', (req, res) => {
                 res.json({ result });
             });
     } else if (name === 'nick_name') {
+        console.log(value1);
         normalization.Nick_Name_Check(value1)
             .then(result => {
                 res.json({ result });
@@ -86,9 +137,6 @@ app.post('/login', (req, res) => {
 app.post('/posts-import', async (req, res) => {
     const data = await posts.Get();
     
+
     res.send(data);
-})
-// 포트 설정
-app.listen(2098, function(){
-    console.log('서버 구동');
 })

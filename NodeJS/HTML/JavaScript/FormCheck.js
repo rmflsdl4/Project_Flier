@@ -135,6 +135,12 @@ function InitForm(){
     for(let i = 0; i < arr.length; i++){
         arr[i].style.marginBottom = "10px";
     }
+    Exit_Check();
+}
+function Exit_Check(){
+    window.onbeforeunload = function(){
+        return '변경사항이 저장되지 않을 수 있습니다.';
+    }
 }
 function Input_Data_Check_To_Submit(){
     let inputData = document.getElementsByTagName("input");

@@ -1,7 +1,6 @@
 const database = require('../database.js');
 
 async function User_Insert(id, pw, nick_name){
-    await database.Connect();
     
     const query = 'INSERT INTO users(id, pw, nick_name) VALUES (?, ?, ?)';
     const values = [id, pw, nick_name];
@@ -11,9 +10,6 @@ async function User_Insert(id, pw, nick_name){
     if (result instanceof Error) {
         return;
     }
-        
-    
-    database.Close();
 }
 
 module.exports = {

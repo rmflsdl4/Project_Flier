@@ -1,7 +1,6 @@
 const database = require('../database.js');
 
 async function Get_Post(){
-    await database.Connect();
     
     const query = 'SELECT post_id, title, author_id, DATE_FORMAT(added, \'%Y-%m-%d %H:%i:%s\') as date, view_count, board_type FROM posts';
 
@@ -11,7 +10,6 @@ async function Get_Post(){
         return;
     }
 
-    database.Close();
     return result;
 }
 

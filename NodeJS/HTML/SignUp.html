@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="CSS/m_style.css">
         <link rel="stylesheet" href="CSS/font.css">
         <script src="JavaScript/FormCheck.js"></script>
+        <script src="JavaScript/WebSocket.js"></script>
         <meta charset="utf-8">
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
@@ -20,11 +21,11 @@
                     <input id="confirm_pw" type="password" name="confirm_pw" placeholder="비밀번호 확인"  maxlength="49" oninput="Input_Check(this);">
                 </div>
                 <div>
-                    <input id="nick_name" type="text" name="nick_name" placeholder="별명" maxlength="19" oninput="Input_Check(this);">
+                    <input id="nick_name" type="text" name="nick_name" placeholder="별명" maxlength="19" onkeyup="Input_Check(this);">
                 </div>
                 <div id="MainMenuBox">
                     <a href="Login.html">로그인 페이지로 이동</a>
-                    <button id="sign_up" type="submit" disabled>회원가입</button>
+                    <button id="sign_up" type="submit" disabled onclick="window.onbeforeunload = null;">회원가입</button>
                 </div>
             </form>
         </div>

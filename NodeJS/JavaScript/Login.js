@@ -1,7 +1,6 @@
 const database = require('../database.js');
 
 async function _Login(id, pw){
-    await database.Connect();
     
     const query = 'SELECT COUNT(*) as count FROM users WHERE id = ? AND pw = ?';
     const values = [id, pw];
@@ -13,7 +12,6 @@ async function _Login(id, pw){
     }
         
     
-    database.Close();
     return result[0].count;
 }
 

@@ -4,6 +4,7 @@
         <link rel="stylesheet" href="CSS/m_style.css">
         <link rel="stylesheet" href="CSS/font.css">
         <script src="JavaScript/FormCheck.js"></script>
+        <script src="JavaScript/WebSocket.js"></script>
         <meta charset="utf-8">
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
@@ -12,8 +13,9 @@
             }
         </style>
     </head>
-    <body id="Main_BackGround">
+    <body id="Main_BackGround" onload="Client_Count()">
         <div>
+            <p id="client_cnt"></p>
             <form action="/login" method="POST">
                 <input id="id" type="text" name="id" placeholder="아이디" maxlength="29" onInput="Input_Data_Check_To_Submit();">
                 <br>
