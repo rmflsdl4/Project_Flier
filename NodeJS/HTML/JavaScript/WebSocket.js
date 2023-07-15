@@ -1,4 +1,4 @@
-const webSocket = new WebSocket(`ws://${window.location.hostname}`);
+const webSocket = new WebSocket(`ws://${window.location.hostname}:2098`);
 
 
 function Client_Count(){
