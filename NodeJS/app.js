@@ -1,6 +1,5 @@
 // 사용 모듈 로드
 const express = require('express');
-const session = require('express-session');
 const wsModule = require('ws');
 const normalization = require('./JavaScript/Normalization_Check.js');
 const signup = require('./JavaScript/SignUp.js');
@@ -42,15 +41,6 @@ webSocketServer.on('connection', (ws, request) => {
         database.Close();
     })
 })
-
-
-
-// 세션 설정
-app.use(session({
-    secret: 'secretkey',
-    resave: false,
-    saveUninitialized: true
-}));
 
 // 라우팅 설정
 
