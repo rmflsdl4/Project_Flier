@@ -45,7 +45,7 @@ async function Posts_Output(board_type){
         const row = rows[idx];
         let structure = `
             <td class='add_td_Tag' colspan='1'>${idx + 1}</td>
-            <td class='add_td_Tag' colspan='4' onclick='View_Post(${row['post_id']});'>${row['title']}</td>
+            <td class='add_td_Tag' colspan='4' onclick="window.location.href='Post.html?post_id=${row['post_id']}'">${row['title']}</td>
             <td class='add_td_Tag' colspan='2'>${row['author_id']}</td>
             <td class='add_td_Tag' colspan='2'>${row['date']}</td>
             <td class='add_td_Tag' colspan='1'>${row['view_count']}</td>`;
@@ -72,6 +72,50 @@ function Posts_Import() {
             });
     });
 }
-function View_Post(post_id){
-    window.location.href = 'Post.html?post_id=' + post_id;
+async function View_Post(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const post_id = urlParams.get('post_id');
+    console.log(post_id);
+    const post = await new Promise((resolve, reject) => {
+        fetch('/view-post', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ post_id })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const result = data;
+            
+            resolve(result);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
+
+    const postById = document.getElementById('post');
+
+    postById.innerHTML =
+    `<table>
+        <tr>
+            <td colspan='6'><b>${post[0]['board_type']}</b></td>
+        </tr>
+        <tr>
+            <td colspan='6'>${post[0]['title']}</td>
+        </tr>
+        <tr>
+            <th width=10%>작성자</th>
+            <td width=30%>${post[0]['author_id']}</td>
+            <th width=10%>작성일</th>
+            <td width=30%>${post[0]['date']}</td>
+            <th width=10%>조회수</th>
+            <td width=10%>${post[0]['view_count']}</td>
+        </tr>
+        <tr>
+            <td colspan='6' height='300'>${post[0]['content']}</td>
+        </tr>
+    </table>`;
 }
