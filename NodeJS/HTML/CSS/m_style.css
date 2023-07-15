@@ -89,6 +89,9 @@ a:hover{
 	text-align: center;
 	border: 1px solid gray;
 }
+.add_td_Tag:hover{
+	cursor: pointer;
+}
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
