@@ -16,34 +16,23 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // 서버 구동
-const httpServer = app.listen(2098, function(){
+app.listen(2098, function(){
     console.log('서버 구동');
 });
 
-const webSocketServer = new wsModule.Server({ server: httpServer });
+// 서버 오류 처리
+process.on('uncaughtException', (err) => {
+    console.error('오류가 발생했습니다:', err);
+  
+    database.Close();
+    
+    process.exit(1); // 0이 아닌 값은 비정상적인 종료를 나타냄
+  });
 
-const clients = new Set();
-
-// 소켓 설정
-webSocketServer.on('connection', (ws, request) => {
-    if(clients.has(ws)){
-        ws.close();
-        return;
-    }
-
-    clients.add(ws);
-    ws.send('현재 접속자 수 - ' + clients.size);
-
-    database.Connect();
-
-    ws.on('close', () => {
-        clients.delete(ws);
-        database.Close();
-    })
-})
+// 데이터베이스 연결
+database.Connect();
 
 // 라우팅 설정
-
 
 app.get('/', function(req, res){
     fs.readFile('HTML/Login.html', function(error, data){

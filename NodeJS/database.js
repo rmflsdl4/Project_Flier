@@ -4,7 +4,7 @@ let pool = null;
 
 function DB_Connect(){
     pool = mysql.createPool({
-        connectionLimit: 20,
+        connectionLimit: 200,
         host: 'svc.sel4.cloudtype.app',
         user: 'root',
         password: 'tkfkdgo3@',
