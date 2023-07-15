@@ -45,7 +45,7 @@ async function Posts_Output(board_type){
         const row = rows[idx];
         let structure = `
             <td class='add_td_Tag' colspan='1'>${idx + 1}</td>
-            <td class='add_td_Tag' colspan='4'>${row['title']}</td>
+            <td class='add_td_Tag' colspan='4' onclick='View_Post(${row['post_id']});'>${row['title']}</td>
             <td class='add_td_Tag' colspan='2'>${row['author_id']}</td>
             <td class='add_td_Tag' colspan='2'>${row['date']}</td>
             <td class='add_td_Tag' colspan='1'>${row['view_count']}</td>`;
@@ -71,4 +71,7 @@ function Posts_Import() {
                 reject(error);
             });
     });
+}
+function View_Post(post_id){
+    window.location.href = 'Post.html?post_id=' + post_id;
 }
