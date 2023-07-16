@@ -128,7 +128,7 @@ async function View_Post(){
             <td width=10%>${post[0]['view_count']}</td>
         </tr>
         <tr>
-            <td colspan='6' height='300'>${post[0]['content']}</td>
+            <td colspan='6' height='300'>${post[0]['content'].replace(/\n/g, '<br/>')}</td>
         </tr>
     </table>`;
 }
