@@ -2,7 +2,10 @@ const database = require('../database.js');
 
 async function Get_Post_List(){
     
-    const query = 'SELECT post_id, title, author_id, DATE_FORMAT(added, \'%Y-%m-%d %H:%i:%s\') as date, view_count, board_type FROM posts';
+    const query = `SELECT post_id, title, CONCAT(nick_name, '(', SUBSTRING(id, 1, 5), '***', ')') as author_id, DATE_FORMAT(added, '%Y-%m-%d %H:%i:%s') as date, view_count, board_type
+                    FROM posts
+                    JOIN users
+                    ON posts.author_id = users.id`;
 
     const result = await database.Query(query, null);
 
