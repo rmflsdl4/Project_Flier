@@ -88,25 +88,75 @@ a:hover{
 .Board_Title, .add_tr_tag{
     background-color: #e6e6e6;
 }
-.add_tr_tag{
-    transition: opacity 0.5s;
-}
 .add_tr_tag:hover{
     background-color: #d1d1d1;
     cursor: pointer;
 }
-
 /* Post */
 #post{
     width: 800px;
     border: 1px solid gray;
     text-align: center;
     border-collapse: collapse;
-    font-size: 18px;
+    font-size: 20px;
 }
 #post td, #post th{
     padding: 10px;
     border: 1px solid gray;
+}
+/* Add_Post */
+#Add_Post_Box{
+    width: 800px;
+}
+#free, #QnA{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+#free + label{
+    background-color: #e6e6e6;
+}
+#Qna + label{
+    opacity: 0.1;
+}
+#free + label, #Qna + label{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 150px;
+    height: 50px;
+    background-color: none;
+    cursor: pointer;
+    font-size: 20px;
+    float: left;
+}
+#add_title, #add_content{
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: #e6e6e6;
+    font-size: 20px;
+    text-align: center;
+}
+#add_title{
+    height: 50px;
+}
+#add_content{
+    resize: none;
+    padding: 20px;
+}
+#post_submit{
+    width: 100%;
+    cursor: pointer;
+    background-color: #e6e6e6;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+}
+#post_submit:hover{
+    background-color: #d1d1d1;
 }
 
 /* 반응형 스타일 */

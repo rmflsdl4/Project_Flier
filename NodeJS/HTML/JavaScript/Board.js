@@ -1,13 +1,13 @@
 const menu = document.getElementsByClassName('Board_Menu');
 
-async function Board_Select(){
+function Board_Select(){
     const clickElement = event.target;
 
     for(let idx = 0; idx < menu.length; idx++){
         if(menu[idx] === clickElement){
             menu[idx].style.opacity = 1;
             menu[idx].style.backgroundColor = '#e6e6e6';
-            await Posts_Output(menu[idx].textContent);
+            Posts_Output(menu[idx].textContent);
         }
         else{
             menu[idx].style.opacity = 0.1;
@@ -15,7 +15,7 @@ async function Board_Select(){
         }
     }
 }
-async function Board_State_Init(){
+function Board_State_Init(){
     
     for(let idx = 0; idx < menu.length; idx++){
         if(idx === 0){
@@ -27,7 +27,7 @@ async function Board_State_Init(){
             menu[idx].style.backgroundColor = 'none';
         }
     }
-    await Posts_Output('공지사항');
+    Posts_Output('공지사항');
 }
 async function Posts_Output(board_type){
     const board = document.getElementById('Board');
@@ -57,13 +57,14 @@ async function Posts_Output(board_type){
             <td class='add_td_Tag' colspan='2'>${row['date']}</td>
             <td class='add_td_Tag' colspan='1'>${row['view_count']}</td>`;
         
-        tr.style.opacity = '0';
         board.appendChild(tr);
         tr.innerHTML = structure;
-
-        await new Promise((resolve) => setTimeout(resolve, 200 * 0.7));
-        tr.style.opacity = '1';
     }
+    const tr = document.createElement('tr');
+    tr.setAttribute('class', 'add_tr_tag');
+    tr.setAttribute('onclick', `window.location.href='Add_Post.html'`);
+    board.appendChild(tr);
+    tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
 }
 function Posts_Import() {
     return new Promise((resolve, reject) => {
@@ -131,3 +132,24 @@ async function View_Post(){
         </tr>
     </table>`;
 }
+function Add_Post(){
+    const board_type = document.getElementsByName('board_type');
+    for(let i = 0; i <board_type.length; i++){
+        if(board_type[i].checked){
+            const label = document.querySelector(`label[for="${board_type[i].id}"]`);
+            label.style.backgroundColor = '#e6e6e6';
+            label.style.opacity = 1.0;
+        }
+        else{
+            const label = document.querySelector(`label[for="${board_type[i].id}"]`);
+            label.style.backgroundColor = 'none';
+            label.style.opacity = 0.1;
+        }
+    }
+}
+function autoResize(textarea) {
+    textarea.style.height = 'auto';
+  
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+  

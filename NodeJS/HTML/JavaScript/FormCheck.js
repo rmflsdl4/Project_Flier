@@ -107,7 +107,15 @@ function Input_Check(element){
             });
     }
     else if(element.name === "nick_name"){
-        Value_Check(element.name, element.value, null)
+        const spaceBar = / /;
+        if(spaceBar.test(element.value)){
+            img.src = "Image/dcheck.png";
+            textNode.nodeValue = "공백은 별명에 사용할 수 없습니다.";
+            MessageBox_Check();
+            return;
+        }
+        else{
+            Value_Check(element.name, element.value, null)
             .then(result => {
                 nnc = result;
                 if(result){
@@ -120,6 +128,7 @@ function Input_Check(element){
                 }
                 MessageBox_Check();
             });
+        }
     }
 
     if(pw.value !== confirm_pw.value && pw.value !== null && confirm_pw.value !== null){
