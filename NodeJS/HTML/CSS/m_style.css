@@ -64,14 +64,13 @@ a:hover{
 
 /* Main */
 #Board{
-    width: 1200px;
+	text-align: center;
+    width: 100%;
     border-collapse: collapse;
-    margin-top: 200px;
+    margin-top: 100px;
 }
 .Board_Menu{
     font-size: 18px;
-    border: 1px solid gray;
-    border-bottom: none;
     height: 50px;
     color: black;
     transition: opacity 0.5s;
@@ -79,14 +78,22 @@ a:hover{
 }
 .Board_Title{
     height: 30px;
-    border: 1px solid gray;
+    border-right: none;
+    border-left: none;
+    padding: 15px;
 }
 .add_td_Tag{
-	text-align: center;
-	border: 1px solid gray;
+    padding: 15px;
 }
-.add_td_Tag:hover{
-	cursor: pointer;
+.Board_Title, .add_tr_tag{
+    background-color: #e6e6e6;
+}
+.add_tr_tag{
+    transition: opacity 0.5s;
+}
+.add_tr_tag:hover{
+    background-color: #d1d1d1;
+    cursor: pointer;
 }
 
 /* Post */
