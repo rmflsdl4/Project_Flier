@@ -6,10 +6,12 @@ async function Board_Select(){
     for(let idx = 0; idx < menu.length; idx++){
         if(menu[idx] === clickElement){
             menu[idx].style.opacity = 1;
+            menu[idx].style.backgroundColor = '#e6e6e6';
             await Posts_Output(menu[idx].textContent);
         }
         else{
-            menu[idx].style.opacity = 0.2;
+            menu[idx].style.opacity = 0.1;
+            menu[idx].style.backgroundColor = 'none';
         }
     }
 }
@@ -18,9 +20,11 @@ async function Board_State_Init(){
     for(let idx = 0; idx < menu.length; idx++){
         if(idx === 0){
             menu[idx].style.opacity = 1;
+            menu[idx].style.backgroundColor = '#e6e6e6';
         }
         else{
-            menu[idx].style.opacity = 0.2;
+            menu[idx].style.opacity = 0.1;
+            menu[idx].style.backgroundColor = 'none';
         }
     }
     await Posts_Output('공지사항');
@@ -43,14 +47,22 @@ async function Posts_Output(board_type){
     for(let idx = 0; idx < rows.length; idx++){
         const tr = document.createElement('tr');
         const row = rows[idx];
+        tr.setAttribute('class', 'add_tr_tag');
+        tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
+
         let structure = `
             <td class='add_td_Tag' colspan='1'>${idx + 1}</td>
-            <td class='add_td_Tag' colspan='4' onclick="window.location.href='Post.html?post_id=${row['post_id']}'">${row['title']}</td>
+            <td class='add_td_Tag' colspan='4'>${row['title']}</td>
             <td class='add_td_Tag' colspan='2'>${row['author_id']}</td>
             <td class='add_td_Tag' colspan='2'>${row['date']}</td>
             <td class='add_td_Tag' colspan='1'>${row['view_count']}</td>`;
+        
+        tr.style.opacity = '0';
         board.appendChild(tr);
         tr.innerHTML = structure;
+
+        await new Promise((resolve) => setTimeout(resolve, 200 * 0.7));
+        tr.style.opacity = '1';
     }
 }
 function Posts_Import() {
