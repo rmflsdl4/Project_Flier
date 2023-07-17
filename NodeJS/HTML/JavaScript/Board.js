@@ -71,7 +71,7 @@ async function Posts_Output(board_type){
         tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
 
         let structure = `
-            <td class='add_td_Tag' colspan='1'>${idx + 1}</td>
+            <td class='add_td_Tag' colspan='1'>${nowPagePosts + idx + 1}</td>
             <td class='add_td_Tag' colspan='4'>${row['title']}</td>
             <td class='add_td_Tag' colspan='2'>${row['author_id']}</td>
             <td class='add_td_Tag' colspan='2'>${row['date']}</td>
