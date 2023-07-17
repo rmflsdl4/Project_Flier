@@ -68,7 +68,13 @@ async function Posts_Output(board_type){
         const tr = document.createElement('tr');
         const row = nowPagePosts[idx];	//rows를 nowPagePosts 변경
         tr.setAttribute('class', 'add_tr_tag');
-        tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
+        if(row['lock_bool'] === 'true'){
+            tr.setAttribute('onclick', `Lock_Post_Check(${row['post_id']})`);
+            row['title'] = '🔒︎ 비밀글입니다.';
+        }
+        else{
+            tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
+        }
 
         let structure = `
             <td class='add_td_Tag' colspan='1'>${startIndex + idx + 1}</td>
@@ -177,13 +183,46 @@ async function View_Post(){
         </tr>
     </table>`;
 }
-function Add_Post(){
+async function Add_Post(values){
+    event.preventDefault();
+
+    const formData = new FormData(values);
+
+    var lock = document.getElementById('lock');
+    var state = lock.dataset.state;
+    formData.append('lock_state', state);
+    fetch('/add-post', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ formData: Object.fromEntries(formData) })
+    })
+    .then(res => {
+        alert('게시글을 등록하였습니다.');
+        location.href = 'Main.html';
+    })
+    .catch(error => {
+        alert('게시글 등록에 실패하였습니다.');
+        location.href = 'Main.html';
+        console.log(error);
+    });
+}
+function Change_Values(){
     const board_type = document.getElementsByName('board_type');
+    const lock = document.getElementById('lock');
+
     for(let i = 0; i <board_type.length; i++){
         if(board_type[i].checked){
             const label = document.querySelector(`label[for="${board_type[i].id}"]`);
             label.style.backgroundColor = '#e6e6e6';
             label.style.opacity = 1.0;
+            if(board_type[i].value === '질문게시판'){
+                lock.style.display = 'block';
+            }
+            else{
+                lock.style.display = 'none';
+            }
         }
         else{
             const label = document.querySelector(`label[for="${board_type[i].id}"]`);
@@ -196,5 +235,38 @@ function autoResize(textarea) {
     textarea.style.height = 'auto';
   
     textarea.style.height = textarea.scrollHeight + 'px';
-  }
-  
+}
+function Private_Post(lock){
+
+    if(lock.dataset.state === 'true'){
+        lock.style.opacity = 0.2;
+        lock.dataset.state = 'false';
+    }
+    else{
+        lock.style.opacity = 1.0;
+        lock.dataset.state = 'true';
+    }
+}
+function Lock_Post_Check(post_id){
+    fetch('/post-lock-check', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ post_id })
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data === 'true'){
+            console.log(data);
+            window.location.href=`Post.html?post_id=${post_id}`;
+        }
+        else{
+            alert('개인/관리자 이외에는 열람하실 수 없습니다.');
+        }
+    })
+    .catch(error => {
+        alert('오류 발생');
+        console.log(error);
+    });
+}
