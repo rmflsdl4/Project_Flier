@@ -115,6 +115,7 @@ app.post('/login', (req, res) => {
                 req.session.user_id = id;
                 console.log(`회원 [ ${id} ] 접속.... 접속 시간 : ${formattedDate}`);
                 console.log(`세션에 ID 저장: ${req.session.user_id}`);
+                console.log(`현재 남아있는 세션 데이터: ${req.session}`);
                 res.send("<script>alert('로그인에 성공하였습니다.'); location.href='Main.html';</script>");
             }
             else{
@@ -136,14 +137,28 @@ app.post('/view-post', async (req, res) => {
 })
 
 app.post('/add-post', async (req, res) => {
-    const { board_type, title, content } = req.body;
+    const { formData } = req.body;
+    const { board_type, title, content, lock_state } = formData;
+    console.log(board_type, title, content, lock_state);
     try{
-        console.log(req.session.user_id);
-        await posts.Add_Post(board_type, title, content, req.session.user_id);
+        await posts.Add_Post(board_type, title, content, req.session.user_id, lock_state);
         res.send("<script>alert('게시글을 등록하였습니다.'); location.href='Main.html';</script>");
     }
     catch(error){
         console.log(error);
         res.send("<script>alert('게시글 등록에 실패하였습니다.'); location.href='Main.html';</script>");
+    }
+})
+app.post('/post-lock-check', async (req, res) => {
+    const { post_id } = req.body;
+    
+    try{
+        const isLock = await posts.Lock_Check(post_id, req.session.user_id);
+        console.log(isLock);
+        res.send(isLock);
+    }
+    catch(error){
+        console.log(error);
+        res.send('false');
     }
 })
