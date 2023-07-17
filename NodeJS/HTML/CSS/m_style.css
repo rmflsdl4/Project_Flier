@@ -168,13 +168,13 @@ a:hover{
 	}
 	
 	#Board, #post {
-		width: 50px;
-		max-width: 50px;
+		width: 30px;
+		max-width: 30px;
 	}
 	
 	.Board_Menu, .Board_Title, .add_td_Tag {
-		width: 50px;
-		max-width: 50px;
+		width: 30px;
+		max-width: 30px;
 		padding: 30px;
 	}
 
