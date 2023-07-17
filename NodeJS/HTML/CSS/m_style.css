@@ -168,14 +168,14 @@ a:hover{
 	}
 	
 	#Board, #post {
-		width: 30px;
-		max-width: 30px;
+		width: 50px;
+		max-width: 50px;
 	}
 	
 	.Board_Menu, .Board_Title, .add_td_Tag {
-		width: 30px;
-		max-width: 30px;
-		padding: 15px;
+		width: 50px;
+		max-width: 50px;
+		padding: 30px;
 	}
 
 	#Main_BackGround {
@@ -183,6 +183,6 @@ a:hover{
 	}
 
 	#MainMenuBox, #post_submit, .add_td_Tag, #add_title, #add_content, #free + label, #Qna + label, .Board_Menu, .Board_Title {
-		font-size: 7px;
+		font-size: 15px;
 	}
 }
