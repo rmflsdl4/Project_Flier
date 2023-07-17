@@ -71,7 +71,6 @@ a:hover{
 }
 .Board_Menu{
     font-size: 18px;
-	width: 10%;
     height: 50px;
     color: black;
     transition: opacity 0.5s;
@@ -120,7 +119,7 @@ a:hover{
 #Qna + label{
     opacity: 0.1;
 }
-#free + label, #Qna + label{
+#free + label, #QnA + label{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -139,14 +138,27 @@ a:hover{
     outline: none;
     background-color: #e6e6e6;
     font-size: 20px;
-    text-align: center;
+}
+#add_title:focus, #add_content:focus{
+    background-color: #d1d1d1;
 }
 #add_title{
     height: 50px;
+    padding-left: 40px;
+}
+#lock{
+    width: 25px;
+    height: 25px;
+    float: right;
+    opacity: 0.2;
+    cursor: pointer;
+    display: none;
 }
 #add_content{
     resize: none;
-    padding: 20px;
+    padding-left: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 #post_submit{
     width: 100%;
