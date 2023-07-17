@@ -71,6 +71,7 @@ a:hover{
 }
 .Board_Menu{
     font-size: 18px;
+	width: 10%;
     height: 50px;
     color: black;
     transition: opacity 0.5s;
@@ -161,16 +162,22 @@ a:hover{
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
-	#id, #pw, #confirm_pw, #nick_name, #Board, #post, .Board_Menu {
-		width: 100%;
-		max-width: 100%;
+	#id, #pw, #confirm_pw, #nick_name, #Board, #post {
+		width: 30px;
+		max-width: 30px;
+	}
+	
+	.Board_Menu, .Board_Title, .add_td_Tag {
+		width: 30px;
+		max-width: 30px;
+		padding: 15px;
 	}
 
 	#Main_BackGround {
 		padding: 20px;
 	}
 
-	#MainMenuBox, #post_submit, #add_title, #add_content, #free + label, #Qna + label, .Board_Menu, .Board_Title {
+	#MainMenuBox, #post_submit, .add_td_Tag, #add_title, #add_content, #free + label, #Qna + label, .Board_Menu, .Board_Title {
 		font-size: 7px;
 	}
 }
