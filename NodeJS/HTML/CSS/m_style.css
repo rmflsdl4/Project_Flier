@@ -182,7 +182,11 @@ a:hover{
 		padding: 20px;
 	}
 
-	#MainMenuBox, #post_submit, .add_td_Tag, #add_title, #add_content, #free + label, #Qna + label, .Board_Menu, .Board_Title {
+	#MainMenuBox {
+		font-size: 12px;
+	}
+	
+	#post_submit, .add_td_Tag, #add_title, #add_content, #free + label, #Qna + label, .Board_Menu, .Board_Title {
 		font-size: 15px;
 	}
 }
