@@ -30,23 +30,43 @@ function Board_State_Init(){
     Posts_Output('공지사항');
 }
 async function Posts_Output(board_type){
-    const board = document.getElementById('Board');
-    const tds = document.getElementsByClassName('add_td_Tag');
+    const board = document.getElementById('Board');	//목록
+    const tds = document.getElementsByClassName('add_td_Tag');	//게시물
+	const pageContainer = document.getElementById('pageLink');	//페이지링크
 
-    let posts = await Posts_Import();
-    let rows = [];
-    while(tds.length > 0){
+    let posts = await Posts_Import();	//모든 게시물 가져오기
+    let rows = posts.filter((post) => post.board_type === board_type);	//[]변경, 목록에 맞게 게시물 개수
+	
+    while(tds.length > 0){	//기존 게시물 삭제
         tds[0].remove();
     }
-    for(let idx = 0; idx < posts.length; idx++){
-        let row = posts[idx];
-        if(row['board_type'] === board_type){
-            rows.push(row);
-        }
-    }
-    for(let idx = 0; idx < rows.length; idx++){
+	
+	let pageSize = 2;	//10개씩
+	let pageCount = Math.ceil(rows.length / pageSize); // 게시물 전체 크기
+	let nowPage = 1;	//현재 페이지
+	
+	if (window.location.search) {	
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlBoardType = urlParams.get('board_type');
+		nowPage = (board_type === urlBoardType) ? parseInt(urlParams.get('page')) || 1 : 1;	//게시물이 없다면 1로
+		if (nowPage < 1) {	//페이지는 1이상
+			nowPage = 1;
+		}
+		if (nowPage > pageCount) {	//현재페이지가 전체페이지 보다 큰경우 현재 페이지가 전체페이지가 된다
+			nowPage = pageCount;
+		}
+	}
+	else {
+		nowPage = 1;
+	}
+	
+	let startIndex = (nowPage - 1) * pageSize;	//첫 페이지
+	let endIndex = Math.min(startIndex + pageSize, rows.length);	//마지막 페이지
+	let nowPagePosts = rows.slice(startIndex, endIndex);	//페이지에 맞는 게시물
+	
+    for(let idx = 0; idx < nowPagePosts.length; idx++){		//게시물 표시	//rows를 nowPagePosts 변경
         const tr = document.createElement('tr');
-        const row = rows[idx];
+        const row = nowPagePosts[idx];	//rows를 nowPagePosts 변경
         tr.setAttribute('class', 'add_tr_tag');
         tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
 
@@ -65,6 +85,31 @@ async function Posts_Output(board_type){
     tr.setAttribute('onclick', `window.location.href='Add_Post.html'`);
     board.appendChild(tr);
     tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
+
+	pageContainer.innerHTML = '';	//기존 페이지링크 삭제
+	
+	for (let i = 1; i <= pageCount; i++) {	//pageLink
+		const pageLink = document.createElement('a');
+		pageLink.classList.add('pageLink');
+		 pageLink.href = `?board_type=${board_type}&page=${i}`;
+		pageLink.textContent = i;	//숫자를 텍스트로
+		
+		if (i === nowPage) {
+			pageLink.classList.add('active');
+		}
+		
+		pageLink.addEventListener('click', (event) => {
+			event.preventDefault();		//기본동작 취소
+			const urlParams = new URLSearchParams(event.target.href);
+            nowPage = parseInt(urlParams.get('page')) || 1;
+			window.history.pushState({ page: nowPage }, '', `?board_type=${board_type}&page=${nowPage}`);	//페이지 변경시 nowPage 업데이트 
+			Posts_Output(board_type);	//게시물 불러옴
+		});
+		
+		pageContainer.appendChild(pageLink);
+	}
+	console.log('지금 페이지:', nowPage);
+	console.log('지금 페이지 게시물:', nowPagePosts);
 }
 function Posts_Import() {
     return new Promise((resolve, reject) => {
