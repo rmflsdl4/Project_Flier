@@ -162,7 +162,12 @@ a:hover{
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
-	#id, #pw, #confirm_pw, #nick_name, #Board, #post {
+	#id, #pw, #confirm_pw, #nick_name {
+		width: 100%;
+		max-width: 100%;
+	}
+	
+	#Board, #post {
 		width: 30px;
 		max-width: 30px;
 	}
