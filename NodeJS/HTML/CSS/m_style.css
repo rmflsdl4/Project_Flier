@@ -1,4 +1,12 @@
 /* ALL */
+html, body{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #F5F5F5;;
+}
 a{
     text-decoration: none;
     margin-right: 25px;
@@ -7,10 +15,37 @@ a{
 a:hover{
     border-bottom: 1px solid #C0C0C0;
 }
-
+#Logo {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    margin-bottom: 100px;
+}
+  
+#Logo::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 0;
+    height: 3px;
+    background-color: #333;
+    transition: width 0.3s ease;
+}
+  
+#Logo:hover::before {
+    width: 100%;
+}
 /* Main.html */
 #Main_BackGround{
-    background-color: #F5F5F5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -67,7 +102,6 @@ a:hover{
 	text-align: center;
     width: 100%;
     border-collapse: collapse;
-    margin-top: 100px;
 }
 .Board_Menu{
     font-size: 18px;
@@ -94,16 +128,30 @@ a:hover{
 }
 /* Post */
 #post{
-    width: 800px;
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
     border: 1px solid gray;
+    background-color: #fff;
     text-align: center;
     border-collapse: collapse;
     font-size: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 }
 #post td, #post th{
     padding: 10px;
-    border: 1px solid gray;
+    border: 1px solid #ccc;
 }
+#post th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+#post td[colspan="6"] {
+    padding: 20px;
+}
+
+
 /* Add_Post */
 #Add_Post_Box{
     width: 800px;
