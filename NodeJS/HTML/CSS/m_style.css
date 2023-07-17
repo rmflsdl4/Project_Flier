@@ -170,7 +170,7 @@ a:hover{
 		padding: 20px;
 	}
 
-	#MainMenuBox, .Board_Menu {
-		font-size: 14px;
+	#MainMenuBox, #post_submit, #add_title, #add_content, #free + label, #Qna + label, .Board_Menu, .Board_Title {
+		font-size: 7px;
 	}
 }
