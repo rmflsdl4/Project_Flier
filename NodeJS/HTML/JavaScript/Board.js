@@ -41,7 +41,7 @@ async function Posts_Output(board_type){
         tds[0].remove();
     }
 	
-	let pageSize = 2;	//10개씩
+	let pageSize = 10;	//10개씩
 	let pageCount = Math.ceil(rows.length / pageSize); // 게시물 전체 크기
 	let nowPage = 1;	//현재 페이지
 	
