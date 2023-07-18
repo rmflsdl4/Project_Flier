@@ -8,6 +8,8 @@ function Board_Select(){
             menu[idx].style.opacity = 1;
             menu[idx].style.backgroundColor = '#e6e6e6';
             Posts_Output(menu[idx].textContent);
+			nowPage = 1; //현재 페이지를 1로 설정
+			window.history.pushState({ page: nowPage }, '', `?page=1`); //목록을 누르면 page를 1로 업데이트
         }
         else{
             menu[idx].style.opacity = 0.1;
@@ -97,7 +99,7 @@ async function Posts_Output(board_type){
 	for (let i = 1; i <= pageCount; i++) {	//pageLink
 		const pageLink = document.createElement('a');
 		pageLink.classList.add('pageLink');
-		 pageLink.href = `?board_type=${board_type}&page=${i}`;
+		pageLink.href = `?board_type=${board_type}&page=${i}`;
 		pageLink.textContent = i;	//숫자를 텍스트로
 		
 		if (i === nowPage) {
@@ -114,6 +116,7 @@ async function Posts_Output(board_type){
 		
 		pageContainer.appendChild(pageLink);
 	}
+	console.log('목록:', board_type);
 	console.log('지금 페이지:', nowPage);
 	console.log('지금 페이지 게시물:', nowPagePosts);
 }
