@@ -236,14 +236,14 @@ a:hover{
 
 /* 반응형 스타일 */
 @media (max-width: 768px) {
-	#id, #pw, #confirm_pw, #nick_name, #Logo {
+	#id, #pw, #confirm_pw, #nick_name {
 		width: 100%;
 		max-width: 100%;
 	}
 	
 	#deleteDiv{
-		width: 50%;
-		max-width: 50%;
+		width: 80%;
+		max-width: 80%;
 	}
 	
 	#Add_Post_Box {
@@ -251,19 +251,14 @@ a:hover{
 		max-width: 80%;
 	}
 	
-	#Board, #post {
-		width: 30%;
-		max-width: 30%;
+	#Board, #post, #Logo {
+		width: 80%;
+		max-width: 80%;
 	}
 	
 	.Board_Menu, .Board_Title, .add_td_Tag {
-		width: 50%;
-		max-width: 50%;
-		padding: 24px;
-	}
-
-	#Main_BackGround {
-		padding: 20px;
+		width: 30%;
+		max-width: 30%;
 	}
 
 	#MainMenuBox {
