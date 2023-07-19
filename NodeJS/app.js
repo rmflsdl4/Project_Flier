@@ -174,6 +174,16 @@ app.post('/post-lock-check', async (req, res) => {
         res.send('false');
     }
 })
+// 제목, 내용, 게시글 넘버 받아서 게시글 업데이트
 app.post('/update-post', async (req, res) => {
+    const { title, content, post_id } = req.body;
 
+    try{
+        await posts.Update_Post(title, content, post_id);
+        res.send("<script>alert('게시글을 수정하였습니다.'); location.href='Main.html';</script>");
+    }
+    catch(error){
+        console.log(error);
+        res.send("<script>alert('게시글 수정에 실패하였습니다.'); location.href='Main.html';</script>");
+    }
 })
