@@ -193,8 +193,10 @@ app.post('/delete-post', async (req, res) => {
 	console.log(post_id);
 	try {
 		await posts.delete_post(post_id);
+		res.send("<script>alert('삭제되었습니다.'); window.location.href = '/';</script>");
 	}
 	catch(error){
         console.log(error);
+		res.send("<script>alert('삭제 실패'); window.location.href = '/';</script>");
     }
 })
