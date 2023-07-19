@@ -75,11 +75,23 @@ async function Lock_Post_Check(post_id, user_id){
         return 'false';
     }
 }
+// 게시글 수정
+async function Update_Post(title, content, post_id){
+    const query = `UPDATE posts SET title = ?, content = ? WHERE post_id = ?`;
 
+    const values = [title, content, post_id];
+
+    result = await database.Query(query, values);
+
+    if(result instanceof Error){
+        return;
+    }
+}
 module.exports = {
     Get_List: Get_Post_List,
     Get_Post: Get_Post,
     Add_View_Count: Add_View_Count,
     Add_Post: Add_Post,
-    Lock_Check: Lock_Post_Check
+    Lock_Check: Lock_Post_Check,
+    Update_Post: Update_Post
 };
