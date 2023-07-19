@@ -9,7 +9,7 @@
     <body onload="Get_Update_Post();">
         <div id="Logo" onclick="window.location.href = 'Main.html'">NPYS</div>
         <center>
-            <form id="Update_Post_Box" action='/update-post' method='POST'>
+            <form id="Update_Post_Box" action='/update-post' method='POST' onsubmit='confirm('게시글을 수정하시겠습니까?')'>
             </form>
         </center>
     </body>
