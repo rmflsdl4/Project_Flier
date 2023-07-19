@@ -187,3 +187,14 @@ app.post('/update-post', async (req, res) => {
         res.send("<script>alert('게시글 수정에 실패하였습니다.'); location.href='Main.html';</script>");
     }
 })
+// post_id받아서 delete_post로 넘김
+app.post('/delete-post', async (req, res) => {
+	const { post_id } = req.body;
+	console.log(post_id);
+	try {
+		await posts.delete_post(post_id);
+	}
+	catch(error){
+        console.log(error);
+    }
+})
