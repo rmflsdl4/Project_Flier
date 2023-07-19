@@ -87,11 +87,25 @@ async function Update_Post(title, content, post_id){
         return;
     }
 }
+// 게시글 삭제
+async function delete_post(post_id) {
+	const query = `DELETE FROM posts
+				  WHERE post_id = ?`;
+	console.log(post_id);
+	const values = [post_id];
+	
+	const result = await database.Query(query, values);
+	
+	if (result instanceof Error) {
+		console.error(result);
+	}
+}
 module.exports = {
     Get_List: Get_Post_List,
     Get_Post: Get_Post,
     Add_View_Count: Add_View_Count,
     Add_Post: Add_Post,
     Lock_Check: Lock_Post_Check,
-    Update_Post: Update_Post
+    Update_Post: Update_Post,
+	delete_post: delete_post
 };
