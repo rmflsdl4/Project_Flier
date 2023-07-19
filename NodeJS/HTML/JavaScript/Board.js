@@ -8,7 +8,7 @@ function Board_Select(){
             menu[idx].style.opacity = 1;
             menu[idx].style.backgroundColor = '#e6e6e6';
             Posts_Output(menu[idx].textContent);
-			nowPage = 1; //현재 페이지를 1로 설정
+            nowPage = 1; //현재 페이지를 1로 설정
 			window.history.pushState({ page: nowPage }, '', `?page=1`); //목록을 누르면 page를 1로 업데이트
         }
         else{
@@ -99,7 +99,7 @@ async function Posts_Output(board_type){
 	for (let i = 1; i <= pageCount; i++) {	//pageLink
 		const pageLink = document.createElement('a');
 		pageLink.classList.add('pageLink');
-		pageLink.href = `?board_type=${board_type}&page=${i}`;
+		 pageLink.href = `?board_type=${board_type}&page=${i}`;
 		pageLink.textContent = i;	//숫자를 텍스트로
 		
 		if (i === nowPage) {
@@ -116,7 +116,6 @@ async function Posts_Output(board_type){
 		
 		pageContainer.appendChild(pageLink);
 	}
-	console.log('목록:', board_type);
 	console.log('지금 페이지:', nowPage);
 	console.log('지금 페이지 게시물:', nowPagePosts);
 }
@@ -139,12 +138,11 @@ function Posts_Import() {
             });
     });
 }
+// 작성자 본인이라면 수정, 삭제 아이콘 표시, 아니라면 표시 X (게시물 내용 자체는 전부 표시됨)
 async function View_Post(){
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const post_id = urlParams.get('post_id');
-    console.log(post_id);
-    const post = await new Promise((resolve, reject) => {
+    const post_id = await Get_Post_id();
+
+    const result = await new Promise((resolve, reject) => {
         fetch('/view-post', {
             method: 'POST',
             headers: {
@@ -153,8 +151,7 @@ async function View_Post(){
             body: JSON.stringify({ post_id })
         })
         .then(response => response.json())
-        .then(data => {
-            const result = data;
+        .then(result => {
             
             resolve(result);
         })
@@ -162,8 +159,12 @@ async function View_Post(){
             reject(error);
         });
     });
+    const post = result.data;
+    const user_id = result.session_id;
 
     const postById = document.getElementById('post');
+    const Delete_Button = document.getElementById('delete');
+    const Update_Button = document.getElementById('update');
 
     postById.innerHTML =
     `<table>
@@ -185,6 +186,15 @@ async function View_Post(){
             <td colspan='6' height='300'>${post[0]['content'].replace(/\n/g, '<br/>')}</td>
         </tr>
     </table>`;
+
+    if(post[0]['author_id'] === user_id){
+        Delete_Button.style.display = 'block';
+        Update_Button.style.display = 'block';
+    }
+    else{
+        Delete_Button.style.display = 'none';
+        Update_Button.style.display = 'none';
+    }
 }
 async function Add_Post(values){
     event.preventDefault();
@@ -211,6 +221,7 @@ async function Add_Post(values){
         console.log(error);
     });
 }
+// 질문 게시판이라면 비밀글 아이콘 표시, 아니라면 숨김
 function Change_Values(){
     const board_type = document.getElementsByName('board_type');
     const lock = document.getElementById('lock');
@@ -234,11 +245,13 @@ function Change_Values(){
         }
     }
 }
+// textarea 자동으로 줄 늘어남
 function autoResize(textarea) {
     textarea.style.height = 'auto';
   
     textarea.style.height = textarea.scrollHeight + 'px';
 }
+// 비밀글 true/false 판단해서 투명도와 상태 변경
 function Private_Post(lock){
 
     if(lock.dataset.state === 'true'){
@@ -250,6 +263,7 @@ function Private_Post(lock){
         lock.dataset.state = 'true';
     }
 }
+// 비밀글인지 확인하는 함수
 function Lock_Post_Check(post_id){
     fetch('/post-lock-check', {
         method: 'POST',
@@ -272,4 +286,52 @@ function Lock_Post_Check(post_id){
         alert('오류 발생');
         console.log(error);
     });
+}
+// post_id를 전달하면서 수정 페이지로 이동
+async function Update_Post_Page(){
+    const post_id = await Get_Post_id();
+    window.location.href = 'Update_Post.html?post_id='+post_id;
+}
+// post_id를 반환하는 함수. 예시 ) const post_id = Get_Post_id();
+function Get_Post_id(){
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const post_id = urlParams.get('post_id');
+
+    return post_id;
+}
+// 수정할 글을 불러옴
+async function Get_Update_Post(){
+    const post_id = await Get_Post_id();
+
+    const result = await new Promise((resolve, reject) => {
+        fetch('/view-post', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ post_id })
+        })
+        .then(response => response.json())
+        .then(result => {
+            
+            resolve(result);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
+    const post = result.data;
+
+    const postById = document.getElementById('post');
+
+    postById.innerHTML =
+    `
+    <form action='/update-post' method='POST'>
+        <input type='text' value='${post[0]['board_type']}' readonly>
+        <input type='text' value='${post[0]['title']}' name='title' id='update_title'>
+        <textarea name='content' rows='1' oninput="autoResize(this)" id='update_content'>${post[0]['content'].replace(/\n/g, '<br/>')}</textarea>
+        <button type="submit" id="Update_Button2">수정</button>
+    </form>`;
+
 }
