@@ -287,6 +287,30 @@ function Lock_Post_Check(post_id){
         console.log(error);
     });
 }
+// Get_Post_id()로 post_id를 찾고 delete-post로 전달	//게시글 삭제
+async function Delete_Post() {
+	const post_id = await Get_Post_id();
+	const check = confirm("게시글을 삭제하겠습니까?");
+	
+	
+	if (check) {
+		fetch('/delete-post', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ post_id })
+		})
+		.then(post_id => {
+			alert("삭제되었습니다.");
+			location.href = 'Main.html';
+		})
+		.catch(error => {
+			alert('오류 발생');
+			console.log(error);
+		});
+	}
+}
 // post_id를 전달하면서 수정 페이지로 이동
 async function Update_Post_Page(){
     const post_id = await Get_Post_id();
