@@ -103,6 +103,7 @@ a:hover{
     border-collapse: collapse;
 }
 .Board_Menu{
+	width: 10%;
     font-size: 18px;
     height: 50px;
     color: black;
