@@ -323,15 +323,18 @@ async function Get_Update_Post(){
     });
     const post = result.data;
 
-    const postById = document.getElementById('post');
+    const postById = document.getElementById('Update_Post_Box');
 
     postById.innerHTML =
     `
-    <form action='/update-post' method='POST'>
-        <input type='text' value='${post[0]['board_type']}' readonly>
+    <form>
+        <input type='text' value='${post[0]['board_type']}' id='update_board_type' readonly>
         <input type='text' value='${post[0]['title']}' name='title' id='update_title'>
         <textarea name='content' rows='1' oninput="autoResize(this)" id='update_content'>${post[0]['content'].replace(/\n/g, '<br/>')}</textarea>
-        <button type="submit" id="Update_Button2">수정</button>
+        <input type='hidden' name='post_id' value='${post_id}'>
+        <button type='submit' id='update_div'>
+			<img id="update_button" src='Image/update.png' width='28px'>
+            수정하기
+		</button>
     </form>`;
-
 }
