@@ -149,10 +149,10 @@ a:hover{
 #post td[colspan="6"] {
     padding: 20px;
 }
-#deleteDiv {
-	width: 80%;
+#deleteDiv, #updateDiv{
+    width: 80%;
 }
-#delete {
+#delete, #update {
 	text-align: center;
     cursor: pointer;
     background-color: #F5F5F5;
@@ -160,11 +160,11 @@ a:hover{
 	border-collapse: collapse;
 	float: right;
     opacity: 0.2;
+    margin-left: 20px;
 }
-#delete:hover{
-    background-color: #d1d1d1;
+#delete:hover, #update:hover{
+    filter: opacity(0.5) drop-shadow(0 0 0 #d1d1d1);
 }
-
 
 /* Add_Post */
 #Add_Post_Box{
@@ -232,6 +232,41 @@ a:hover{
 }
 #post_submit:hover{
     background-color: #d1d1d1;
+}
+
+/* Update_Post */
+#update_title, #update_content{
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: #e6e6e6;
+    font-size: 20px;
+}
+#update_title:focus, #update_content:focus{
+    background-color: #d1d1d1;
+}
+#update_title{
+    height: 50px;
+    padding-left: 40px;
+}
+#update_content{
+    resize: none;
+    padding-left: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+#Update_Button2{
+    font-size: 16px;
+    width: 130px;
+    height: 40px;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: 0.5s background-color;
+}
+#Update_Button2:hover{
+    background-color: #347236;
 }
 
 /* 반응형 스타일 */
