@@ -1,15 +1,27 @@
 // 사용 모듈 로드
 const express = require('express');
 const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const normalization = require('./JavaScript/Normalization_Check.js');
 const signup = require('./JavaScript/SignUp.js');
 const login = require('./JavaScript/Login.js');
 const posts = require('./JavaScript/Post.js');
 const database = require('./database.js');
 
+// 데이터베이스 연결
+database.Connect();
 // 모듈에서 사용할 로직들
 const app = express();
 var fs = require('fs');
+const sessionStore = new MySQLStore({
+    host: 'svc.sel4.cloudtype.app',
+    user: 'root',
+    password: 'tkfkdgo3@',
+    database: 'flier',
+    port: '32388',
+    charset: 'UTF8MB4',
+    expiration: 24 * 60 * 60 * 1000
+});
 
 app.use(express.static('HTML'))
 app.use(express.json());
@@ -21,6 +33,7 @@ app.use(session({
     cookie: {
         maxAge: 24 * 60 * 60 * 1000,
     },
+    store: sessionStore,
 }));
 
 // 서버 구동
@@ -35,10 +48,8 @@ process.on('uncaughtException', (err) => {
     database.Close();
     
     process.exit(1); // 0이 아닌 값은 비정상적인 종료를 나타냄
-  });
+});
 
-// 데이터베이스 연결
-database.Connect();
 
 // 라우팅 설정
 
@@ -112,9 +123,9 @@ app.post('/login', (req, res) => {
     login.Login(id, pw)
         .then((state) => {
             if(state === 1){
-                req.session.user_id = id;
+                req.session.session_id = id;
                 console.log(`회원 [ ${id} ] 접속.... 접속 시간 : ${formattedDate}`);
-                console.log(`세션에 ID 저장: ${req.session.user_id}`);
+                console.log(`세션에 ID 저장: ${req.session.session_id}`);
                 console.log(`현재 남아있는 세션 데이터: ${req.session}`);
                 res.send("<script>alert('로그인에 성공하였습니다.'); location.href='Main.html';</script>");
             }
@@ -133,7 +144,8 @@ app.post('/view-post', async (req, res) => {
     const { post_id } = req.body;
     await posts.Add_View_Count(post_id);
     const data = await posts.Get_Post(post_id);
-    res.send(data);
+    const session_id = req.session.session_id;
+    res.send( { data, session_id });
 })
 
 app.post('/add-post', async (req, res) => {
@@ -141,7 +153,7 @@ app.post('/add-post', async (req, res) => {
     const { board_type, title, content, lock_state } = formData;
     console.log(board_type, title, content, lock_state);
     try{
-        await posts.Add_Post(board_type, title, content, req.session.user_id, lock_state);
+        await posts.Add_Post(board_type, title, content, req.session.session_id, lock_state);
         res.send("<script>alert('게시글을 등록하였습니다.'); location.href='Main.html';</script>");
     }
     catch(error){
@@ -153,7 +165,7 @@ app.post('/post-lock-check', async (req, res) => {
     const { post_id } = req.body;
     
     try{
-        const isLock = await posts.Lock_Check(post_id, req.session.user_id);
+        const isLock = await posts.Lock_Check(post_id, req.session.session_id);
         console.log(isLock);
         res.send(isLock);
     }
@@ -161,4 +173,7 @@ app.post('/post-lock-check', async (req, res) => {
         console.log(error);
         res.send('false');
     }
+})
+app.post('/update-post', async (req, res) => {
+
 })
