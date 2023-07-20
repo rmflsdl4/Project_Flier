@@ -121,12 +121,15 @@ app.post('/login', (req, res) => {
     const { id, pw } = req.body;
 
     login.Login(id, pw)
-        .then((state) => {
+        .then((arr) => {
+            const state = arr[0];
+            const user_type = arr[1];
             if(state === 1){
                 req.session.session_id = id;
+                req.session.user_type = user_type;
                 console.log(`회원 [ ${id} ] 접속.... 접속 시간 : ${formattedDate}`);
                 console.log(`세션에 ID 저장: ${req.session.session_id}`);
-                console.log(`현재 남아있는 세션 데이터: ${req.session}`);
+                console.log(`유저 타입: ${user_type}`);
                 res.send("<script>alert('로그인에 성공하였습니다.'); location.href='Main.html';</script>");
             }
             else{
