@@ -112,6 +112,12 @@ async function Posts_Output(board_type){
     board.appendChild(tr);
     if(user_type === 'admin'){
         tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
+        const tr2 = document.createElement('tr');
+        tr2.setAttribute('class', 'add_tr_tag');
+        tr2.setAttribute('onclick', `Checked_Post_To_Delete()`);
+        board.appendChild(tr2);
+        tr2.innerHTML = `
+        <td class='add_td_Tag' colspan='10'><img src='Image/delete.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 삭제하기</td>`;
     }
     else{
         if(board_type !== "공지사항"){
@@ -297,19 +303,14 @@ function Lock_Post_Check(post_id){
         },
         body: JSON.stringify({ post_id })
     })
-    .then(res => res.text())
     .then(data => {
-        if(data === 'true'){
-            console.log(data);
-            window.location.href=`Post.html?post_id=${post_id}`;
-        }
-        else{
+        if(data !== 'true'){
             alert('개인/관리자 이외에는 열람하실 수 없습니다.');
         }
     })
     .catch(error => {
         alert('오류 발생');
-        console.log(error);
+        alert(error);
     });
 }
 // Get_Post_id()로 post_id를 찾고 delete-post로 전달	//게시글 삭제
@@ -407,4 +408,28 @@ async function Get_User_Type(){
     const user_type = await result.text();
 
     return user_type;
+}
+// 현재 선택된 게시물
+function Checked_Post_To_Delete(){
+    const posts = document.getElementsByName('selectedPost');
+    let posts_id = [];
+    for(let i = 0; i < posts.length; i++){
+        if(posts[i].checked){
+            posts_id.push(posts[i].value);
+        }
+    }
+    fetch('/selected-posts-delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ posts_id })
+    })
+    .then(res => {
+        alert('게시글을 삭제하였습니다.');
+        window.location.href = 'Main.html';
+    })
+    .catch(error => {
+        console.log(error);
+    });
 }
