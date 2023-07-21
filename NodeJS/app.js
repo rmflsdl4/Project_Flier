@@ -203,3 +203,8 @@ app.post('/delete-post', async (req, res) => {
 		res.send("<script>alert('삭제 실패'); window.location.href = '/';</script>");
     }
 })
+app.post('/get-user-type', async (req, res) => {
+    const user_type = req.session.user_type;
+    
+    res.send(user_type);
+})
