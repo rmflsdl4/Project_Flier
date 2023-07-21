@@ -32,15 +32,20 @@ function Board_State_Init(){
     Posts_Output('공지사항');
 }
 async function Posts_Output(board_type){
+    const user_type = await Get_User_Type();
     const board = document.getElementById('Board');	//목록
     const tds = document.getElementsByClassName('add_td_Tag');	//게시물
 	const pageContainer = document.getElementById('pageLink');	//페이지링크
+    const postCheck = document.getElementsByClassName('postCheck'); // 포스트 선택
 
     let posts = await Posts_Import();	//모든 게시물 가져오기
     let rows = posts.filter((post) => post.board_type === board_type);	//[]변경, 목록에 맞게 게시물 개수
 	
     while(tds.length > 0){	//기존 게시물 삭제
         tds[0].remove();
+        if(postCheck.length > 0){
+            postCheck[0].remove();
+        }
     }
 	
 	let pageSize = 10;	//10개씩
@@ -75,15 +80,28 @@ async function Posts_Output(board_type){
             row['title'] = '🔒︎ 비밀글입니다.';
         }
         else{
-            tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
+            if(user_type === "user"){
+                tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
+            }
         }
-
-        let structure = `
+        let structure = ``;
+        // structure에 admin과 user 분기점 나누기
+        if(user_type === "admin"){
+            structure = `
+            <td class='add_td_Tag' colspan='1'><input type='checkbox' class='postCheck' name='selectedPost' value='${row['post_id']}'>${startIndex + idx + 1}</td>
+            <td class='add_td_Tag' colspan='4' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['title']}</td>
+            <td class='add_td_Tag' colspan='2' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['author_id']}</td>
+            <td class='add_td_Tag' colspan='2' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['date']}</td>
+            <td class='add_td_Tag' colspan='1' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['view_count']}</td>`;
+        }
+        else{
+            structure = `
             <td class='add_td_Tag' colspan='1'>${startIndex + idx + 1}</td>
             <td class='add_td_Tag' colspan='4'>${row['title']}</td>
             <td class='add_td_Tag' colspan='2'>${row['author_id']}</td>
             <td class='add_td_Tag' colspan='2'>${row['date']}</td>
             <td class='add_td_Tag' colspan='1'>${row['view_count']}</td>`;
+        }
         
         board.appendChild(tr);
         tr.innerHTML = structure;
@@ -92,7 +110,14 @@ async function Posts_Output(board_type){
     tr.setAttribute('class', 'add_tr_tag');
     tr.setAttribute('onclick', `window.location.href='Add_Post.html'`);
     board.appendChild(tr);
-    tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
+    if(user_type === 'admin'){
+        tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
+    }
+    else{
+        if(board_type !== "공지사항"){
+            tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
+        }
+    }
 
 	pageContainer.innerHTML = '';	//기존 페이지링크 삭제
 	
@@ -361,4 +386,25 @@ async function Get_Update_Post(){
             수정하기
 		</button>
     </form>`;
+}
+// 유저 타입 가져오는 함수
+async function Get_User_Type(){
+    const result = await new Promise((resolve, reject) => {
+        fetch('/get-user-type', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        })
+        .then(data => {
+            resolve(data);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    })
+
+    const user_type = await result.text();
+
+    return user_type;
 }
