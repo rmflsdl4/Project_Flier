@@ -203,8 +203,24 @@ app.post('/delete-post', async (req, res) => {
 		res.send("<script>alert('삭제 실패'); window.location.href = '/';</script>");
     }
 })
+// 유저 타입 반환
 app.post('/get-user-type', async (req, res) => {
     const user_type = req.session.user_type;
-    
+
     res.send(user_type);
+})
+// 선택한 게시글 삭제 (관리자 전용)
+app.post('/selected-posts-delete', async (req, res) => {
+    const { posts_id } = req.body;
+
+    try{
+        if(posts_id.length > 0){
+            await posts.Posts_Delete(posts_id);
+        }
+        res.send();
+    }
+    catch(error){
+        console.log(error);
+        res.send("<script>alert('오류 발생. 삭제 실패.'); window.location.href = 'Main.html';</script>");
+    }
 })
