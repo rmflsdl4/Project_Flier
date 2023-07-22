@@ -110,12 +110,37 @@ async function Selected_Posts_Delete(posts_id){
         }
     }
     query += ')';
-    
+
     const result = await database.Query(query, posts_id);
 
     if(result instanceof Error){
         console.error(result);
     }
+}
+// 모든 유저 가져옴
+async function get_users() {
+	const query = `SELECT id, nick_name, user_type 
+				  FROM users`;
+	
+	const result = await database.Query(query, null);
+	
+	if (result instanceof Error) {
+		console.error(result);
+	}
+	return result;
+}
+// 유저삭제
+async function delete_users(id, nick_name) {
+	const query = `DELETE FROM users
+				  WHERE id = ? AND nick_name = ?`;
+				  
+	const values = [id, nick_name];
+	
+	const result = await database.Query(query, values);
+	
+	if (result instanceof Error) {
+		console.error(result);
+	}
 }
 module.exports = {
     Get_List: Get_Post_List,
@@ -125,5 +150,7 @@ module.exports = {
     Lock_Check: Lock_Post_Check,
     Update_Post: Update_Post,
 	delete_post: delete_post,
-    Posts_Delete: Selected_Posts_Delete
+	Posts_Delete: Selected_Posts_Delete,
+	get_users: get_users,
+	delete_users: delete_users
 };
