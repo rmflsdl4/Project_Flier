@@ -70,7 +70,7 @@ async function Posts_Output(board_type){
 	let startIndex = (nowPage - 1) * pageSize;	//첫 페이지
 	let endIndex = Math.min(startIndex + pageSize, rows.length);	//마지막 페이지
 	let nowPagePosts = rows.slice(startIndex, endIndex);	//페이지에 맞는 게시물
-	
+	const selectAll = document.getElementById('selectAll');
     for(let idx = 0; idx < nowPagePosts.length; idx++){		//게시물 표시	//rows를 nowPagePosts 변경
         const tr = document.createElement('tr');
         const row = nowPagePosts[idx];	//rows를 nowPagePosts 변경
@@ -87,6 +87,7 @@ async function Posts_Output(board_type){
         let structure = ``;
         // structure에 admin과 user 분기점 나누기
         if(user_type === "admin"){
+            selectAll.style.display = 'block';
             structure = `
             <td class='add_td_Tag' colspan='1'><input type='checkbox' class='postCheck' name='selectedPost' value='${row['post_id']}'>${startIndex + idx + 1}</td>
             <td class='add_td_Tag' colspan='4' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['title']}</td>
@@ -95,6 +96,7 @@ async function Posts_Output(board_type){
             <td class='add_td_Tag' colspan='1' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['view_count']}</td>`;
         }
         else{
+            selectAll.style.display = 'none';
             structure = `
             <td class='add_td_Tag' colspan='1'>${startIndex + idx + 1}</td>
             <td class='add_td_Tag' colspan='4'>${row['title']}</td>
@@ -432,4 +434,13 @@ function Checked_Post_To_Delete(){
     .catch(error => {
         console.log(error);
     });
+}
+// 모든 게시물 선택 ( 관리자 )
+function SelectAll(element){
+    const postCheck = document.getElementsByClassName('postCheck');
+    const isChecked = element.checked;
+
+    for (let i = 0; i < postCheck.length; i++) {
+        postCheck[i].checked = isChecked;
+    }
 }
