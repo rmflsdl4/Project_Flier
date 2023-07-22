@@ -206,7 +206,7 @@ app.post('/delete-post', async (req, res) => {
 // 유저 타입 반환
 app.post('/get-user-type', async (req, res) => {
     const user_type = req.session.user_type;
-
+    
     res.send(user_type);
 })
 // 선택한 게시글 삭제 (관리자 전용)
@@ -222,5 +222,24 @@ app.post('/selected-posts-delete', async (req, res) => {
     catch(error){
         console.log(error);
         res.send("<script>alert('오류 발생. 삭제 실패.'); window.location.href = 'Main.html';</script>");
+    }
+})
+//모든 유저 가져옴
+app.post('/users-import', async (req, res) => {
+	const data = await posts.get_users();
+	
+    res.send(data);
+})
+//유저삭제
+app.post('/delete-users', async (req, res) => {
+	const { id, nick_name } = req.body;
+	console.log(id, nick_name);
+	try {
+		await posts.delete_users(id, nick_name);
+		res.send("<script>alert(id + ' 가 삭제되었습니다.'); window.location.href = '/';</script>");
+	}
+	catch(error){
+        console.log(error);
+		res.send("<script>alert('삭제 실패'); window.location.href = '/';</script>");
     }
 })
