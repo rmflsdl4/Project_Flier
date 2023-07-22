@@ -78,6 +78,7 @@ async function Posts_Output(board_type){
 	const selectAll = document.getElementById('selectAll');
     for(let idx = 0; idx < nowPagePosts.length; idx++){		//게시물 표시	//rows를 nowPagePosts 변경
 		const cangeTitle = document.querySelectorAll('.Board_Title');	//제목이름 변경을 위해서
+		const inputElement = document.createElement('input');
         const tr = document.createElement('tr');
         const row = nowPagePosts[idx];	//rows를 nowPagePosts 변경
         tr.setAttribute('class', 'add_tr_tag');
@@ -100,6 +101,14 @@ async function Posts_Output(board_type){
 						element.textContent = '';
 						element.colSpan = 1;
 						element.style.width = '10%';
+						
+						inputElement.type = 'checkbox';
+						inputElement.id = 'selectAll';
+						inputElement.style.display = 'none';
+						inputElement.onclick = function() {
+							SelectAll(this);
+						};
+						element.appendChild(inputElement);
 						break;
 					case '제목':
 						element.textContent = '아이디';
@@ -117,13 +126,14 @@ async function Posts_Output(board_type){
 						element.style.width = '20%';
 						break;
 					case '조회수':
-						element.textContent = '';
+						element.textContent = ' ';
 						element.colSpan = 1;
 						element.style.width = '20%';
 						break;
 				}
 			})
 			
+			selectAll.style.display = 'none';
 			structure = `
 			<td class='add_td_Tag' onclick="manageUsers('${row['id']}', '${row['nick_name']}', '${row['user_type']}')" colspan='1'>관리</td>
 			<td class='add_td_Tag' colspan='4'>${row['id']}</td>
@@ -132,7 +142,44 @@ async function Posts_Output(board_type){
 			<td class='add_td_Tag' colspan='1'></td>`;
 		}
 		else if(user_type === "admin"){
-			selectAll.style.display = 'block';
+			cangeTitle.forEach((element) => {
+				switch (element.textContent) {
+					case '':
+						element.textContent = '번호';
+						element.colSpan = 1;
+						element.style.width = '10%';
+						
+						inputElement.type = 'checkbox';
+						inputElement.id = 'selectAll';
+						inputElement.style.display = 'block';
+						inputElement.onclick = function() {
+							SelectAll(this);
+						};
+						element.appendChild(inputElement);
+						break;
+					case '아이디':
+						element.textContent = '제목';
+						element.colSpan = 3;
+						element.style.width = '30%';
+						break;
+					case '별명':
+						element.textContent = '작성자';
+						element.colSpan = 3;
+						element.style.width = '30%';
+						break;
+					case '타입':
+						element.textContent = '등록일';
+						element.colSpan = 2;
+						element.style.width = '20%';
+						break;
+					case ' ':
+						element.textContent = '조회수';
+						element.colSpan = 1;
+						element.style.width = '20%';
+						break;
+				}
+			})
+			
             structure = `
             <td class='add_td_Tag' colspan='1'><input type='checkbox' class='postCheck' name='selectedPost' value='${row['post_id']}'>${startIndex + idx + 1}</td>
             <td class='add_td_Tag' colspan='4' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['title']}</td>
@@ -348,7 +395,7 @@ function Change_Values(){
 async function Init_Add_Post(){
     const user_type = await Get_User_Type();
     const board_type = document.getElementsByName('board_type');
-    
+
     const label_1 = document.querySelector(`label[for="${board_type[0].id}"]`);
     const label_2 = document.querySelector(`label[for="${board_type[1].id}"]`);
 
