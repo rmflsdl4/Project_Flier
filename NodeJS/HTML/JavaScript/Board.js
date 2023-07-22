@@ -2,7 +2,7 @@ const menu = document.getElementsByClassName('Board_Menu');
 
 function Board_Select(){
     const clickElement = event.target;
-
+	
     for(let idx = 0; idx < menu.length; idx++){
         if(menu[idx] === clickElement){
             menu[idx].style.opacity = 1;
@@ -18,7 +18,6 @@ function Board_Select(){
     }
 }
 function Board_State_Init(){
-    
     for(let idx = 0; idx < menu.length; idx++){
         if(idx === 0){
             menu[idx].style.opacity = 1;
@@ -32,18 +31,23 @@ function Board_State_Init(){
     Posts_Output('공지사항');
 }
 async function Posts_Output(board_type){
-    const user_type = await Get_User_Type();
+	const user_type = await Get_User_Type();
     const board = document.getElementById('Board');	//목록
     const tds = document.getElementsByClassName('add_td_Tag');	//게시물
 	const pageContainer = document.getElementById('pageLink');	//페이지링크
-    const postCheck = document.getElementsByClassName('postCheck'); // 포스트 선택
-
+	const postCheck = document.getElementsByClassName('postCheck'); // 포스트 선택
+	
     let posts = await Posts_Import();	//모든 게시물 가져오기
-    let rows = posts.filter((post) => post.board_type === board_type);	//[]변경, 목록에 맞게 게시물 개수
+	let users = await Users_Import();	//모든 유저 가져오기
+    let rows = posts.filter((post) => post.board_type === board_type);	//[]변경, 목록에 맞게 게시물 추출
+	
+	if (board_type === "유저관리") {
+		rows = users;
+	}
 	
     while(tds.length > 0){	//기존 게시물 삭제
         tds[0].remove();
-        if(postCheck.length > 0){
+		if(postCheck.length > 0){
             postCheck[0].remove();
         }
     }
@@ -70,8 +74,10 @@ async function Posts_Output(board_type){
 	let startIndex = (nowPage - 1) * pageSize;	//첫 페이지
 	let endIndex = Math.min(startIndex + pageSize, rows.length);	//마지막 페이지
 	let nowPagePosts = rows.slice(startIndex, endIndex);	//페이지에 맞는 게시물
+	
 	const selectAll = document.getElementById('selectAll');
     for(let idx = 0; idx < nowPagePosts.length; idx++){		//게시물 표시	//rows를 nowPagePosts 변경
+		const cangeTitle = document.querySelectorAll('.Board_Title');	//제목이름 변경을 위해서
         const tr = document.createElement('tr');
         const row = nowPagePosts[idx];	//rows를 nowPagePosts 변경
         tr.setAttribute('class', 'add_tr_tag');
@@ -84,27 +90,66 @@ async function Posts_Output(board_type){
                 tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row['post_id']}'`);
             }
         }
-        let structure = ``;
-        // structure에 admin과 user 분기점 나누기
-        if(user_type === "admin"){
-            selectAll.style.display = 'block';
+		
+		let structure = ``;
+        // structure에 admin과 user 및 유저관리 분기점 나누기
+		if (board_type === "유저관리") {
+			cangeTitle.forEach((element) => {
+				switch (element.textContent) {
+					case '번호':
+						element.textContent = '';
+						element.colSpan = 1;
+						element.style.width = '10%';
+						break;
+					case '제목':
+						element.textContent = '아이디';
+						element.colSpan = 3;
+						element.style.width = '30%';
+						break;
+					case '작성자':
+						element.textContent = '별명';
+						element.colSpan = 3;
+						element.style.width = '30%';
+						break;
+					case '등록일':
+						element.textContent = '타입';
+						element.colSpan = 2;
+						element.style.width = '20%';
+						break;
+					case '조회수':
+						element.textContent = '';
+						element.colSpan = 1;
+						element.style.width = '20%';
+						break;
+				}
+			})
+			
+			structure = `
+			<td class='add_td_Tag' onclick="manageUsers('${row['id']}', '${row['nick_name']}', '${row['user_type']}')" colspan='1'>관리</td>
+			<td class='add_td_Tag' colspan='4'>${row['id']}</td>
+			<td class='add_td_Tag' colspan='2'>${row['nick_name']}</td>
+			<td class='add_td_Tag' colspan='2'>${row['user_type']}</td>
+			<td class='add_td_Tag' colspan='1'></td>`;
+		}
+		else if(user_type === "admin"){
+			selectAll.style.display = 'block';
             structure = `
             <td class='add_td_Tag' colspan='1'><input type='checkbox' class='postCheck' name='selectedPost' value='${row['post_id']}'>${startIndex + idx + 1}</td>
             <td class='add_td_Tag' colspan='4' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['title']}</td>
             <td class='add_td_Tag' colspan='2' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['author_id']}</td>
             <td class='add_td_Tag' colspan='2' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['date']}</td>
             <td class='add_td_Tag' colspan='1' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['view_count']}</td>`;
-        }
-        else{
-            selectAll.style.display = 'none';
-            structure = `
+		}
+		else {
+			selectAll.style.display = 'none';
+			structure = `
             <td class='add_td_Tag' colspan='1'>${startIndex + idx + 1}</td>
             <td class='add_td_Tag' colspan='4'>${row['title']}</td>
             <td class='add_td_Tag' colspan='2'>${row['author_id']}</td>
             <td class='add_td_Tag' colspan='2'>${row['date']}</td>
             <td class='add_td_Tag' colspan='1'>${row['view_count']}</td>`;
-        }
-        
+		}
+
         board.appendChild(tr);
         tr.innerHTML = structure;
     }
@@ -112,17 +157,17 @@ async function Posts_Output(board_type){
     tr.setAttribute('class', 'add_tr_tag');
     tr.setAttribute('onclick', `window.location.href='Add_Post.html'`);
     board.appendChild(tr);
-    if(user_type === 'admin'){
+    if(user_type === 'admin' && board_type !== '유저관리'){
         tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
-        const tr2 = document.createElement('tr');
+		const tr2 = document.createElement('tr');
         tr2.setAttribute('class', 'add_tr_tag');
         tr2.setAttribute('onclick', `Checked_Post_To_Delete()`);
         board.appendChild(tr2);
         tr2.innerHTML = `
         <td class='add_td_Tag' colspan='10'><img src='Image/delete.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 삭제하기</td>`;
-    }
+	}
     else{
-        if(board_type !== "공지사항"){
+        if(board_type !== "공지사항" && board_type !== '유저관리'){
             tr.innerHTML = `<td class='add_td_Tag' colspan='10'><img src='Image/add_post.png' width='22px' height='22px' style="vertical-align: middle; margin-right: 10px;">글 작성하기</td>`;
         }
     }
@@ -132,7 +177,7 @@ async function Posts_Output(board_type){
 	for (let i = 1; i <= pageCount; i++) {	//pageLink
 		const pageLink = document.createElement('a');
 		pageLink.classList.add('pageLink');
-		 pageLink.href = `?board_type=${board_type}&page=${i}`;
+		pageLink.href = `?board_type=${board_type}&page=${i}`;
 		pageLink.textContent = i;	//숫자를 텍스트로
 		
 		if (i === nowPage) {
@@ -150,6 +195,7 @@ async function Posts_Output(board_type){
 		pageContainer.appendChild(pageLink);
 	}
 	console.log('지금 페이지:', nowPage);
+	console.log('메뉴 타입:', board_type);
 	console.log('지금 페이지 게시물:', nowPagePosts);
 }
 function Posts_Import() {
@@ -171,10 +217,30 @@ function Posts_Import() {
             });
     });
 }
+//유저 불러오기
+function Users_Import() {
+	return new Promise((resolve, reject) => {
+        fetch('/users-import', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        })
+			.then(response => response.json())
+            .then(data => {
+                const result = data;
+                
+                resolve(result);
+            })
+            .catch(error => {
+                reject(error);
+            });
+    });
+}
 // 작성자 본인이라면 수정, 삭제 아이콘 표시, 아니라면 표시 X (게시물 내용 자체는 전부 표시됨)
 async function View_Post(){
     const post_id = await Get_Post_id();
-
+	
     const result = await new Promise((resolve, reject) => {
         fetch('/view-post', {
             method: 'POST',
@@ -306,20 +372,19 @@ function Lock_Post_Check(post_id){
         body: JSON.stringify({ post_id })
     })
     .then(data => {
-        if(data !== 'true'){
+		if(data !== 'true'){
             alert('개인/관리자 이외에는 열람하실 수 없습니다.');
         }
     })
     .catch(error => {
         alert('오류 발생');
-        alert(error);
+		alert(error);
     });
 }
 // Get_Post_id()로 post_id를 찾고 delete-post로 전달	//게시글 삭제
 async function Delete_Post() {
 	const post_id = await Get_Post_id();
 	const check = confirm("게시글을 삭제하겠습니까?");
-	
 	
 	if (check) {
 		fetch('/delete-post', {
@@ -443,4 +508,46 @@ function SelectAll(element){
     for (let i = 0; i < postCheck.length; i++) {
         postCheck[i].checked = isChecked;
     }
+}
+// 어드민일때만 유저관리 메뉴가 보이게
+async function View_Manage_Users() {
+	const Manage_Menu = document.getElementById('Manage_Users');
+
+	const user_type = await Get_User_Type();
+	console.log('유저타입:', user_type);
+
+	if(user_type === "admin") {
+		Manage_Menu.removeAttribute('style');
+		Manage_Menu.style.opacity = 0.1;
+	}
+}
+// users관리 삭제
+async function manageUsers(id, nick_name, user_type) {
+	console.log(id, nick_name, user_type);
+	
+	if (user_type === 'admin') {
+		alert('어드민은 삭제할 수 없습니다.');
+	}
+	else {
+		const check = confirm("' " + id + " '" + ", ' " + nick_name + " '" + " 를 삭제하겠습니까?");
+		
+		if (check) {
+			fetch('/delete-users', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ id, nick_name })
+			})
+			.then(res => {
+				alert(id + ' 가 삭제되었습니다.');
+				location.href = 'Main.html';
+			})
+			.catch(error => {
+				alert('오류 발생');
+				console.log(error);
+			});
+		}
+	}
+	
 }
