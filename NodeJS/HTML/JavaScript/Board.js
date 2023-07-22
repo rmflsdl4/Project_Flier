@@ -344,6 +344,27 @@ function Change_Values(){
         }
     }
 }
+// Add_Post.html 초기화 함수
+async function Init_Add_Post(){
+    const user_type = await Get_User_Type();
+    const board_type = document.getElementsByName('board_type');
+    
+    const label_1 = document.querySelector(`label[for="${board_type[0].id}"]`);
+    const label_2 = document.querySelector(`label[for="${board_type[1].id}"]`);
+
+    if(user_type === "admin"){
+        label_1.style.display = 'flex';
+        label_1.style.opacity = 1.0;
+        board_type[0].checked = true;
+        board_type[1].checked = false;
+    }
+    else{
+        label_1.style.display = 'none';
+        label_2.style.opacity = 1.0;
+        board_type[0].checked = false;
+        board_type[1].checked = true;
+    }
+}
 // textarea 자동으로 줄 늘어남
 function autoResize(textarea) {
     textarea.style.height = 'auto';
@@ -455,7 +476,7 @@ async function Get_Update_Post(){
 		</button>
     </form>`;
 }
-// 유저 타입 가져오는 함수
+// 유저 타입 가져오는 함수, 사용법 - 데이터타입 변수 = await Get_User_Type();
 async function Get_User_Type(){
     const result = await new Promise((resolve, reject) => {
         fetch('/get-user-type', {
