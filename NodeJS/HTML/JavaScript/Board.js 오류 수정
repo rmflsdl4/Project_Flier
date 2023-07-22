@@ -179,7 +179,8 @@ async function Posts_Output(board_type){
 						break;
 				}
 			})
-			
+
+		selectAll.style.display = 'block';
             structure = `
             <td class='add_td_Tag' colspan='1'><input type='checkbox' class='postCheck' name='selectedPost' value='${row['post_id']}'>${startIndex + idx + 1}</td>
             <td class='add_td_Tag' colspan='4' onclick='window.location.href="Post.html?post_id=${row['post_id']}"'>${row['title']}</td>
