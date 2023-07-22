@@ -6,7 +6,7 @@
         <script src="JavaScript/Board.js"></script>
         <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body style="background-color: #F5F5F5;" onload="Board_State_Init();">
+    <body style="background-color: #F5F5F5;" onload="Board_State_Init(); View_Manage_Users();">
         <center>
             <div id="Logo" onclick="window.location.href = 'Main.html'">NPYS</div>
             <table id="Board">
@@ -14,7 +14,8 @@
                     <th class="Board_Menu" colspan="1" onclick="Board_Select();">공지사항</th>
                     <th class="Board_Menu" colspan="1" onclick="Board_Select();">자유게시판</th>
                     <th class="Board_Menu" colspan="1" onclick="Board_Select();">질문게시판</th>
-                    <th colspan="7" style="width: 70%;"></th>
+					<th class="Board_Menu" id="Manage_Users" colspan="1" style="display: none;" onclick="Board_Select();">유저관리</th>
+                    <th colspan="6" style="width: 60%;"></th>
                 </tr>
                 <tr>
                     <th class="Board_Title" colspan="1" style="text-align: center; width: 10%;"><input type="checkbox" id="selectAll" style="display: none;" onclick="SelectAll(this)">번호</th>
