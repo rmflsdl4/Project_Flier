@@ -1,5 +1,5 @@
 const menu = document.getElementsByClassName('Board_Menu');
-
+let selected_board = "공지사항";
 function Board_Select(){
     const clickElement = event.target;
 	
@@ -8,6 +8,7 @@ function Board_Select(){
             menu[idx].style.opacity = 1;
             menu[idx].style.backgroundColor = '#e6e6e6';
             Posts_Output(menu[idx].textContent);
+            selected_board = menu[idx].textContent;
             nowPage = 1; //현재 페이지를 1로 설정
 			window.history.pushState({ page: nowPage }, '', `?page=1`); //목록을 누르면 page를 1로 업데이트
         }
@@ -440,9 +441,14 @@ function Lock_Post_Check(post_id){
         },
         body: JSON.stringify({ post_id })
     })
+    .then(response => response.json())
     .then(data => {
-		if(data !== 'true'){
+        console.log(data);
+		if(!data){
             alert('개인/관리자 이외에는 열람하실 수 없습니다.');
+        }
+        else{
+            window.location.href='Post.html?post_id=' + post_id;
         }
     })
     .catch(error => {
@@ -619,4 +625,65 @@ async function manageUsers(id, nick_name, user_type) {
 		}
 	}
 	
+}
+// 입력한 검색어에 대한 게시물 출력
+async function Get_Search_Posts(values){
+    event.preventDefault();
+
+    const formData = new FormData(values);
+
+    formData.append('board_type', selected_board); // 현재 선택된 게시판
+
+    const row = await new Promise((resolve, reject) => {
+        fetch('/select-posts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ formData: Object.fromEntries(formData) })
+        })
+        .then(response => response.json())
+        .then(data => {
+           resolve(data);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    })
+
+    const tds = document.getElementsByClassName('add_td_Tag');	//게시물
+
+    while(tds.length > 0){	//기존 게시물 삭제
+        tds[0].remove();
+    }
+
+	const user_type = await Get_User_Type();
+    const board = document.getElementById('Board');	//목록
+	const selectAll = document.getElementById('selectAll');
+    let structure = "";
+    for(let idx = 0; idx < row.length; idx++){	
+        const tr = document.createElement('tr');
+        tr.setAttribute('class', 'add_tr_tag');
+        
+        if(row[idx]['lock_bool'] === 'true'){
+            tr.setAttribute('onclick', `Lock_Post_Check(${row[idx]['post_id']})`);
+            row[idx]['title'] = '🔒︎ 비밀글입니다.';
+        }
+        else{
+            if(user_type === "user"){
+                tr.setAttribute('onclick', `window.location.href='Post.html?post_id=${row[idx]['post_id']}'`);
+            }
+        }
+
+        
+		selectAll.style.display = 'none';
+		structure = `
+            <td class='add_td_Tag' colspan='1'>${idx + 1}</td>
+            <td class='add_td_Tag' colspan='4'>${row[idx]['title']}</td>
+            <td class='add_td_Tag' colspan='2'>${row[idx]['author_id']}</td>
+            <td class='add_td_Tag' colspan='2'>${row[idx]['date']}</td>
+            <td class='add_td_Tag' colspan='1'>${row[idx]['view_count']}</td>`;
+        board.appendChild(tr);
+        tr.innerHTML = structure;
+    }
 }
