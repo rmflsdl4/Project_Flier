@@ -767,13 +767,40 @@ async function comments_output() {
                     <tr>
                         <td class="load" colspan='6'>${row['author_id']}, ${row['nick_name']}</td>
                         <td class="load" colspan='6'>${row['date']}</td>
-						<td class="load" id="delete_comment" colspan='1' onclick='delete_comments(${row['comment_id']}, ${post_id})'> 삭제</td>
+						<td class="delete_comment" colspan='1' onclick='delete_comments(${row['comment_id']}, ${post_id})' style="display: none;"> 삭제</td>
                     </tr>
                     <tr>
                         <td class="load" colspan='10'>${row['comment']}</td>
                     </tr>
                 </table>
             `;
+			
+			const user_type = await Get_User_Type();
+			const delete_comment = document.getElementsByClassName("delete_comment");
+			const result = await new Promise((resolve, reject) => {
+				fetch('/login-user', {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json'
+					}
+				})
+				.then(response => response.json())
+				.then(data => {
+					resolve(data);
+				})
+				.catch(error => {
+					reject(error);
+				});
+			})
+			
+			const user_id = result.session_id;
+
+			console.log(user_id);
+			console.log(row['author_id']);
+
+			if (user_type === 'admin' || row['author_id'] === user_id) {
+				delete_comment[idx].style.display = 'block';
+			}
         }
     }
 	
