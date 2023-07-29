@@ -243,3 +243,17 @@ app.post('/delete-users', async (req, res) => {
 		res.send("<script>alert('삭제 실패'); window.location.href = '/';</script>");
     }
 })
+app.post('/select-posts', async (req, res) => {
+    const { formData } = req.body;
+    const { col, search_content, board_type } = formData;
+
+    try{
+        const data = await posts.Search(col, search_content, board_type);
+        console.log(data);
+        res.send(data);
+    }
+    catch(error){
+        console.log(error);
+    }
+    
+})
