@@ -16,6 +16,13 @@
             <div id="updateDiv">
 				<img id="update" src='Image/update.png' width='30.5px' onclick="Update_Post_Page()">
 			</div>
+			<table id="comment">
+			</table>
+			<div id="pageLink" colspan="10" style="text-align: center;"></div>
+			<form id="form_comment" onsubmit="add_comments(); return false;" method='POST'>
+				<textarea name='content' rows='1' oninput="autoResize(this)" id='textarea_content'></textarea>
+				<button type='submit' id='button_content'>댓글달기</button>
+			</form>
 		</center>
     </body>
 </html>
