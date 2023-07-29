@@ -157,6 +157,48 @@ async function Search_Posts(col, search_content, board_type){
     }
     return result;
 }
+//댓글 불러오기
+async function load_comments(post_id) {
+	const query = `SELECT c.comment_id, c.post_id, c.comment, c.author_id, DATE_FORMAT(c.date, \'%Y-%m-%d %H:%i:%s\') as date, u.nick_name
+				  FROM comments as c
+				  JOIN users as u
+				  ON c.author_id = u.id
+				  WHERE c.post_id = ?`;
+	
+	const result = await database.Query(query, post_id);
+	
+	if (result instanceof Error) {
+		console.error(result);
+	}
+	return result;
+}
+//댓글 추가
+async function add_comment(comment, post_id, id) {
+	const query = `INSERT INTO comments (comment, post_id, author_id)
+				  VALUES(? ,?, ?)`;
+				  
+	const values = [comment, post_id, id];
+	
+	const result = await database.Query(query, values);
+	
+	if (result instanceof Error) {
+		console.error(result);
+	}
+	return result;
+}
+//댓글 삭제
+async function delete_comment(comment_id) {
+	const query = `DELETE FROM comments
+				  WHERE comment_id = ?`;
+	
+	const values = [comment_id];
+	
+	const result = await database.Query(query, values);
+	
+	if (result instanceof Error) {
+		console.error(result);
+	}
+}
 
 module.exports = {
     Get_List: Get_Post_List,
@@ -169,5 +211,8 @@ module.exports = {
 	Posts_Delete: Selected_Posts_Delete,
 	get_users: get_users,
 	delete_users: delete_users,
-    Search: Search_Posts
+	Search: Search_Posts,
+	load_comments: load_comments,
+	add_comment: add_comment,
+	delete_comment: delete_comment
 };
