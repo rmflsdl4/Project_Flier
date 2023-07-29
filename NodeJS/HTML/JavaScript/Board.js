@@ -1,4 +1,5 @@
 const menu = document.getElementsByClassName('Board_Menu');
+
 let selected_board = "공지사항";
 function Board_Select(){
     const clickElement = event.target;
@@ -8,7 +9,7 @@ function Board_Select(){
             menu[idx].style.opacity = 1;
             menu[idx].style.backgroundColor = '#e6e6e6';
             Posts_Output(menu[idx].textContent);
-            selected_board = menu[idx].textContent;
+			selected_board = menu[idx].textContent;
             nowPage = 1; //현재 페이지를 1로 설정
 			window.history.pushState({ page: nowPage }, '', `?page=1`); //목록을 누르면 page를 1로 업데이트
         }
@@ -343,6 +344,7 @@ async function View_Post(){
         Delete_Button.style.display = 'none';
         Update_Button.style.display = 'none';
     }
+	await comments_output();
 }
 async function Add_Post(values){
     event.preventDefault();
@@ -441,13 +443,13 @@ function Lock_Post_Check(post_id){
         },
         body: JSON.stringify({ post_id })
     })
-    .then(response => response.json())
+	.then(response => response.json())
     .then(data => {
-        console.log(data);
+		console.log(data);
 		if(!data){
             alert('개인/관리자 이외에는 열람하실 수 없습니다.');
         }
-        else{
+		else{
             window.location.href='Post.html?post_id=' + post_id;
         }
     })
@@ -664,7 +666,7 @@ async function Get_Search_Posts(values){
     for(let idx = 0; idx < row.length; idx++){	
         const tr = document.createElement('tr');
         tr.setAttribute('class', 'add_tr_tag');
-        
+
         if(row[idx]['lock_bool'] === 'true'){
             tr.setAttribute('onclick', `Lock_Post_Check(${row[idx]['post_id']})`);
             row[idx]['title'] = '🔒︎ 비밀글입니다.';
@@ -675,7 +677,7 @@ async function Get_Search_Posts(values){
             }
         }
 
-        
+
 		selectAll.style.display = 'none';
 		structure = `
             <td class='add_td_Tag' colspan='1'>${idx + 1}</td>
@@ -686,4 +688,169 @@ async function Get_Search_Posts(values){
         board.appendChild(tr);
         tr.innerHTML = structure;
     }
+}
+//댓글 불러오기
+async function load_comments(post_id) {
+	return new Promise((resolve, reject) => {
+        fetch('/load-comment', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+			body: JSON.stringify({ post_id })
+        })
+		.then(response => {
+            if (!response.ok) {
+                throw new Error('오류가 났어요');
+            }
+            return response.json();
+        })
+        .then(data => {
+            resolve(data);
+        })
+        .catch(error => {
+            reject(error);
+        });
+    });
+}
+//댓글
+async function comments_output() {
+	const post_id = await Get_Post_id();
+	console.log('게시물 아이디: ', post_id);
+	const content = await load_comments(post_id);
+	const comment = document.getElementById('comment');
+	const pageContainer = document.getElementById('pageLink');
+	
+	let pageSize = 10;
+	let pageCount = Math.ceil(content.length / pageSize);
+	let nowPage = 1;
+	
+
+	if (window.location.search) {	
+		const urlParams = new URLSearchParams(window.location.search);
+		const urlPage = urlParams.get('commentPage');
+		nowPage = (nowPage !== urlPage) ? urlPage : 1;
+		if (nowPage < 1) {
+			nowPage = 1;
+		}
+		if (nowPage > pageCount) {
+			nowPage = pageCount;
+		}
+	}
+	else {
+		nowPage = 1;
+	}
+	
+	let startIndex = (nowPage - 1) * pageSize;
+	let endIndex = Math.min(startIndex + pageSize, content.length);
+	let nowPagePosts = Array.isArray(content) ? content.slice(startIndex, endIndex) : [];
+	
+    if (nowPagePosts.length === 0) {
+		comment.innerHTML = `
+			<table>
+				<th>댓글이 없습니다.</th>
+			</table>
+		`;
+    }
+	else {
+        comment.innerHTML = '';
+		
+		console.log('댓글 개수: ', nowPagePosts.length);
+		console.log('댓글: ', content);
+		
+        for (let idx = 0; idx < nowPagePosts.length; idx++) {
+            const row = nowPagePosts[idx];
+			console.log(row);
+
+            comment.innerHTML += `
+                <table>
+                    <tr>
+                        <td class="load" colspan='6'>${row['author_id']}, ${row['nick_name']}</td>
+                        <td class="load" colspan='6'>${row['date']}</td>
+						<td class="load" id="delete_comment" colspan='1' onclick='delete_comments(${row['comment_id']}, ${post_id})'> 삭제</td>
+                    </tr>
+                    <tr>
+                        <td class="load" colspan='10'>${row['comment']}</td>
+                    </tr>
+                </table>
+            `;
+        }
+    }
+	
+	pageContainer.innerHTML = '';
+	
+	for (let i = 1; i <= pageCount; i++) {
+        const pageLink = document.createElement('a');
+        pageLink.classList.add('pageLink');
+        pageLink.href = `?post_id=${post_id}&commentPage=${i}`;
+        pageLink.textContent = i;
+
+        if (i === nowPage) {
+            pageLink.classList.add('active');
+        }
+
+        pageLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            const urlParams = new URLSearchParams(event.target.href);
+            nowPage = parseInt(urlParams.get('commentPage')) || 1;
+            window.history.pushState({ commentPage: nowPage }, '', `?post_id=${post_id}&commentPage=${nowPage}`);
+            View_Post();
+        });
+
+        pageContainer.appendChild(pageLink);
+    }
+}
+//댓글 추가
+async function add_comments() {
+	const urlParams = new URLSearchParams(window.location.search);
+	const post_id = urlParams.get('post_id');
+	const clear = document.getElementById('textarea_content');
+	let comment = document.getElementById('textarea_content').value;
+	clear.value = '';
+	
+	console.log(comment);
+	
+	if (comment === "") {
+		alert('내용이 없습니다');
+	}
+	else {
+		fetch('/add-comment', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ comment, post_id })
+		})
+		.then(res => {
+			console.log('댓글 등록 성공');
+			View_Post();
+		})
+		.catch(error => {
+			console.log('댓글 등록 실패');
+			console.log(error);
+		});
+	}
+}
+//댓글 삭제
+async function delete_comments(comment_id, post_id) {
+	const check = confirm("댓글을 삭제하겠습니까?");
+	
+	if (check) {
+		fetch('/delete-comment', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ comment_id })
+		})
+		.then(comment_id => {
+			alert("삭제되었습니다.");
+			location.reload()
+			
+		})
+		.catch(error => {
+			alert('삭제 오류 발생');
+			console.log(error);
+		});
+	}
 }
