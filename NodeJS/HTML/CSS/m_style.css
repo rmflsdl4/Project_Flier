@@ -211,6 +211,19 @@ a:hover{
 #delete:hover, #update:hover{
     filter: opacity(0.5) drop-shadow(0 0 0 #d1d1d1);
 }
+#comment{
+	width: 100%;
+	margin: 5% 0% auto;
+}
+#form_comment {
+	
+}
+#textarea_content {
+	
+}
+#delete_comment {
+	
+}
 
 /* Add_Post */
 #Add_Post_Box{
