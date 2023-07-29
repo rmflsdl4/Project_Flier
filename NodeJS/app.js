@@ -295,3 +295,9 @@ app.post('/delete-comment', async (req, res) => {
         res.send("<script>alert('댓글삭제에 실패하였습니다');</script>");
     }
 });
+//로그인한 유저 반환
+app.post('/login-user', async (req, res) => {
+    const session_id = req.session.session_id;
+	
+    res.send({ session_id });
+})
