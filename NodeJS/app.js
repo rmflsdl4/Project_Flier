@@ -255,5 +255,43 @@ app.post('/select-posts', async (req, res) => {
     catch(error){
         console.log(error);
     }
-    
+
 })
+//댓글 불러오기
+app.post('/load-comment', async (req, res) => {
+	const { post_id } = await req.body;
+	const data = await posts.load_comments(post_id);
+	
+	try {
+		console.log(post_id, '댓글 불러오기');
+		res.send(data);
+	}
+	catch(error) {
+		console.log(error);
+		res.send("<script>alert('오류');</script>");
+	}
+});
+//댓글 추가
+app.post('/add-comment', async (req, res) => {
+    const { comment, post_id } = req.body;
+    try {
+        await posts.add_comment(comment, post_id, req.session.session_id);
+        res.send("<script>alert(id + '가' + post_id + '에 댓글이 추가되었습니다');</script>");
+    }
+    catch(error){
+        console.log(error);
+        res.send("<script>alert('댓글이 추가에 실패하였습니다');</script>");
+    }
+});
+//댓글 삭제
+app.post('/delete-comment', async (req, res) => {
+	const { comment_id } = req.body;
+	try {
+		await posts.delete_comment(comment_id);
+		res.send("<script>alert('댓글 번호' + comment_id + '가 삭제되었습니다');</script>");
+	}
+	catch(error){
+        console.log(error);
+        res.send("<script>alert('댓글삭제에 실패하였습니다');</script>");
+    }
+});
