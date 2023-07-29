@@ -142,6 +142,22 @@ async function delete_users(id, nick_name) {
 		console.error(result);
 	}
 }
+async function Search_Posts(col, search_content, board_type){
+    const query = `SELECT post_id, title, CONCAT(nick_name, '(', SUBSTRING(id, 1, 5), '***', ')') as author_id, DATE_FORMAT(added, '%Y-%m-%d %H:%i:%s') as date, view_count, board_type, user_type, lock_bool
+                    FROM posts 
+                    JOIN users
+                    ON posts.author_id = users.id
+                    WHERE board_type = ? AND ${col} LIKE ?`;
+    const values = [board_type, `%${search_content}%`]
+    console.log(values);
+    const result = await database.Query(query, values);
+    console.log(result);
+    if (result instanceof Error) {
+        return;
+    }
+    return result;
+}
+
 module.exports = {
     Get_List: Get_Post_List,
     Get_Post: Get_Post,
@@ -152,5 +168,6 @@ module.exports = {
 	delete_post: delete_post,
 	Posts_Delete: Selected_Posts_Delete,
 	get_users: get_users,
-	delete_users: delete_users
+	delete_users: delete_users,
+    Search: Search_Posts
 };
