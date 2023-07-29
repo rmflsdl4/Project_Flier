@@ -143,6 +143,34 @@ a:hover{
     background-color: #d1d1d1;
     cursor: pointer;
 }
+.searchBox{
+    width: 400px;
+    border: 1px solid black;
+    height: 30px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+.searchBox *{
+    display: flex;
+    align-items: center;
+    height: 30px;
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+.searchBox select{
+    text-align: center;
+}
+.searchBox input[type="search"]{
+    padding: 10px;
+    width: 100%;
+    border-right: none;
+}
+.searchBox input[type="image"]{
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+}
 /* Post */
 #post{
     width: 80%;
