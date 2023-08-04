@@ -39,6 +39,16 @@ a:hover{
     background-color: #333;
     transition: width 0.3s ease;
 }
+#pageLink {
+	margin: 2% 0%;
+	font-size: 18px;
+}
+#pageLink a {
+	color: black;
+}
+#pageLink a:hover {
+	color: #C0C0C0;
+}
   
 #Logo:hover::before {
     width: 100%;
@@ -211,18 +221,67 @@ a:hover{
 #delete:hover, #update:hover{
     filter: opacity(0.5) drop-shadow(0 0 0 #d1d1d1);
 }
+.load {
+	padding: 10px;
+}
 #comment{
-	width: 100%;
-	margin: 5% 0% auto;
+	width: 78%;
+	margin: 1% 0% auto;
+	border: 1px solid #ccc;
+	border-collapse: collapse;
+    background-color: #fff;
+	font-size: 20px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 }
 #form_comment {
-	
+	width: 78%;
+}
+#form_comment div {
+	font-size: 1em;
+	font-weight: bold;
+	padding-bottom: 3px;
+	margin: 1% 0%;
+	border-bottom: 1px solid #ccc;
 }
 #textarea_content {
-	
+	width: 100%;
+	height: 5%;
+	text-align: left;
+	resize: none;
+	overflow: hidden;
+	font-size: 20px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 }
-#delete_comment {
-	
+#textarea_content:focus {
+	height: 129px;
+}
+#button_content {
+	float: right;
+	background-color: #F5F5F5;
+	border: 1px solid #ccc;
+	font-size: 15px;
+	margin-top: 1%;
+	margin-bottom: 10%;
+	cursor: pointer;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+	padding: 10px;
+}
+#button_content:hover {
+	background-color: #fff;
+}
+.delete_comment {
+	padding: 10px;
+	text-align: right;
+}
+.delete_comment span {
+	font-size: 15px;
+	cursor: pointer;
+}
+.delete_comment span:hover {
+	text-decoration: underline;
 }
 
 /* Add_Post */
