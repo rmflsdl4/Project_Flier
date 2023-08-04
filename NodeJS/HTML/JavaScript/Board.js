@@ -765,12 +765,12 @@ async function comments_output() {
             comment.innerHTML += `
                 <table>
                     <tr>
-                        <td class="load" colspan='6'>${row['author_id']}, ${row['nick_name']}</td>
-                        <td class="load" colspan='6'>${row['date']}</td>
-						<td class="delete_comment" colspan='1' onclick='delete_comments(${row['comment_id']}, ${post_id})' style="display: none;"> 삭제</td>
+                        <td class="load" style="border-bottom: 1px dashed black; width: 50%; background-color: #f2f2f2;">${row['nick_name']}</td>
+                        <td class="load" style="border-bottom: 1px dashed black; width: 50%; background-color: #f2f2f2; text-align: right;">${row['date']}</td>
                     </tr>
                     <tr>
-                        <td class="load" colspan='10'>${row['comment']}</td>
+                        <td class="load" style="width: 80%;">${row['comment']}</td>
+						<td class="delete_comment" style="display: none;"><span onclick='delete_comments(${row['comment_id']}, ${post_id})'>삭제</span></td>
                     </tr>
                 </table>
             `;
@@ -832,6 +832,7 @@ async function add_comments() {
 	const urlParams = new URLSearchParams(window.location.search);
 	const post_id = urlParams.get('post_id');
 	const clear = document.getElementById('textarea_content');
+	const submitButton = document.getElementById('button_content');	//아직 사용 안함
 	let comment = document.getElementById('textarea_content').value;
 	clear.value = '';
 	
