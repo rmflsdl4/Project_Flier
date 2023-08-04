@@ -159,7 +159,7 @@ async function Search_Posts(col, search_content, board_type){
 }
 //댓글 불러오기
 async function load_comments(post_id) {
-	const query = `SELECT c.comment_id, c.post_id, c.comment, c.author_id, DATE_FORMAT(c.date, \'%Y-%m-%d %H:%i:%s\') as date, u.nick_name
+	const query = `SELECT c.comment_id, c.post_id, c.comment, c.author_id, DATE_FORMAT(c.date, \'%Y-%m-%d %H:%i:%s\') as date, CONCAT(u.nick_name, '(', SUBSTRING(id, 1, 5), '***', ')') as nick_name
 				  FROM comments as c
 				  JOIN users as u
 				  ON c.author_id = u.id
